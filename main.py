@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 import math
 from prices import *
+import backend
+
 
 def combox(tkan, mats):
     if tkan == mats[0]:
@@ -11,67 +13,6 @@ def combox(tkan, mats):
     elif tkan == mats[2]:
         res = PRICE_pik
     return res
-
-
-def ceiling_half(value):
-    rv = round(value)
-    if value - rv < 0:
-        return rv
-    else:
-        return rv + 0.5
-
-
-def mats_price(size, tkan, wata):
-    price = size * PRICE_baw
-    price += size * tkan
-    if wata == 1:
-        price += size * PRICE_wat
-    price += size * value_waste
-    return ceiling_half(price)
-
-
-def kostka(szer, dl, wys, tkan, wata):
-    size = (szer*dl + szer*wys + wys*dl)*2
-    price = mats_price(size, tkan, wata)
-    if size < 2600:
-        price += size * value_kostka_small
-    elif size <3700:
-        price += size * value_kostka_med
-    else:
-        price += size * value_kostka_big
-    price = ceiling_half(price)
-    return price
-
-def kostka_tr(szer, dl, wys, tkan, wata):
-    size = szer*dl + szer*wys + wys*dl + math.sqrt(dl*dl+szer*szer)
-    price = mats_price(size, tkan, wata)
-    if size < 3700:
-        price += size * value_kostka_tr_small
-    else:
-        price += size * value_kostka_tr_med
-    price = ceiling_half(price)
-    return price
-
-def swinka(szer, dl, wys, tkan, wata):
-    size = szer*dl + (szer*wys + wys*dl)*2
-    price = mats_price(size, tkan, wata)
-    if size < 3500:
-        price += size * value_swinka_small
-    else:
-        price += size * value_swinka_big
-    price = ceiling_half(price)
-    return price
-
-
-def hamak(szer, dl, tkan, wata):
-    size = szer*dl
-    price = mats_price(size, tkan, wata)
-    if size < 1000:
-        price += size * value_hamak_mini
-    else:
-        price += size * value_hamak
-    price = ceiling_half(price)
-    return price
 
 
 def generator(tata, lista):
@@ -119,7 +60,7 @@ class Ham(tk.Frame):
         dlug = self.itenz[self.entr[1]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        calculations = hamak(int(szer.get()), int(dlug.get()), matpric, wat)
+        calculations = backend.hamak(int(szer.get()), int(dlug.get()), matpric, wat)
         self.wynik.insert(0, calculations)
 
 class Ham_tr(tk.Frame):
@@ -134,8 +75,8 @@ class Ham_tr(tk.Frame):
         dlug = self.itenz[self.entr[1]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        hamak_v = hamak(int(szer.get()), int(dlug.get()), matpric, wat)
-        calculations = ceiling_half(hamak_v/2)
+        hamak_v = backend.hamak(int(szer.get()), int(dlug.get()), matpric, wat)
+        calculations = backend.ceiling_half(hamak_v/2)
         self.wynik.insert(0, calculations)
 
 class Ham_2lvl(tk.Frame):
@@ -150,7 +91,7 @@ class Ham_2lvl(tk.Frame):
         dlug = self.itenz[self.entr[1]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        hamak_v = hamak(int(szer.get()), int(dlug.get()), matpric, wat)
+        hamak_v = backend.hamak(int(szer.get()), int(dlug.get()), matpric, wat)
         calculations = 2*hamak_v+2
         self.wynik.insert(0, calculations)
 
@@ -167,7 +108,7 @@ class Kost(tk.Frame):
         wys = self.itenz[self.entr[2]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        calculations = kostka(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
+        calculations = backend.kostka(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
         self.wynik.insert(0, calculations)
 
 class Kost_tr(tk.Frame):
@@ -183,7 +124,7 @@ class Kost_tr(tk.Frame):
         wys = self.itenz[self.entr[2]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        calculations = kostka_tr(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
+        calculations = backend.kostka_tr(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
         self.wynik.insert(0, calculations)
 
 class Swin(tk.Frame):
@@ -199,7 +140,7 @@ class Swin(tk.Frame):
         wys = self.itenz[self.entr[2]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        calculations = swinka(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
+        calculations = backend.swinka(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
         self.wynik.insert(0, calculations)
 
 
