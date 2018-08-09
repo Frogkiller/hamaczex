@@ -164,7 +164,7 @@ class Calculator:
 if __name__ == '__main__':
     root = tk.Tk()
     root.pack_propagate(0)
-    root.geometry("800x600")
+    root.geometry("800x300")
     frame1 = tk.Frame(root)
     frame1.pack()
     separator = tk.Frame(height=2, bd=1, relief=tk.SUNKEN)
