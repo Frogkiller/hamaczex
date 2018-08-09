@@ -1,3 +1,5 @@
+from prices import *
+
 def ceiling_half(value):
     rv = round(value)
     if value - rv < 0:
