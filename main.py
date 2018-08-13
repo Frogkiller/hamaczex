@@ -211,11 +211,38 @@ def do_menu(frame):
     return menu_bar
 
 
+class TabsView(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+        self.root = master
+        self.nb = ttk.Notebook(self.root, width=800, height=600)
+        self.tab1 = self.do_item_frame(self.nb)
+        self.tab2 = tk.Frame(self.nb)
+        self.tab3 = tk.Frame(self.nb)
+        self.nb.add(self.tab1, text="Item")
+        self.nb.add(self.tab2, text="Transaction")
+        self.nb.add(self.tab3, text="Client")
+        self.nb.pack()
+
+    def do_custom_item(self, parent):
+        frame = tk.Frame(parent)
+        ent = tk.Entry(frame).pack()
+        return frame
+
+
+    def do_item_frame(self, nb):
+        frame = tk.Frame(nb)
+        tree = ttk.Treeview(frame).grid(row=0, column=0)
+        view = self.do_custom_item(frame).grid(row=0, column=1)
+        return frame
+
+
 if __name__ == '__main__':
     root = tk.Tk()
     root.pack_propagate(0)
     root.geometry("800x600")
     root.config(menu=do_menu(root))
     frame1 = tk.Frame(root).pack()
+    tabs = TabsView(frame1).pack()
 
     root.mainloop()
