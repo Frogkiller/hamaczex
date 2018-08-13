@@ -229,7 +229,6 @@ class TabsView(tk.Frame):
         ent = tk.Entry(frame).pack()
         return frame
 
-
     def do_item_frame(self, nb):
         frame = tk.Frame(nb)
         tree = ttk.Treeview(frame).grid(row=0, column=0)

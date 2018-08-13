@@ -62,3 +62,22 @@ def ham_calc(szer, dl, tkan, wata):
         price += size * value_hamak
     price = ceiling_half(price)
     return price
+
+
+class Item:
+    def __init__(self, parttype, comment, size, value, tranz, date):
+        self.parttype = parttype
+        self.comment = comment
+        self.size = size
+        self.value = value
+        self.tranz = tranz
+        self.date = date
+
+    def __init__(self):
+        self.parttype = str()
+        self.comment = str()
+        self.size = int()
+        self.value = int()
+        self.tranz = int() # TODO: create tranz class and link here
+        self.date = int()
+
