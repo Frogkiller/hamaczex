@@ -161,10 +161,27 @@ class Calculator:
         self.frame_.pack()
 
 
-if __name__ == '__main__':
+def callback_creator(box_value, full_values, app):
+    def select_callback(event):
+        if box_value.get() == full_values[0]:
+            app.switch_frame(Ham)
+        elif box_value.get() == full_values[1]:
+            app.switch_frame(HamTriangle)
+        elif box_value.get() == full_values[2]:
+            app.switch_frame(Cube)
+        elif box_value.get() == full_values[3]:
+            app.switch_frame(CubeTriangle)
+        elif box_value.get() == full_values[4]:
+            app.switch_frame(Pig)
+        elif box_value.get() == full_values[5]:
+            app.switch_frame(Ham2lvl)
+    return select_callback
+
+
+def add_frame():
     root = tk.Tk()
     root.pack_propagate(0)
-    root.geometry("800x300")
+    root.geometry("300x300")
     frame1 = tk.Frame(root)
     frame1.pack()
     separator = tk.Frame(height=2, bd=1, relief=tk.SUNKEN)
@@ -173,17 +190,32 @@ if __name__ == '__main__':
     frame2.pack()
     AP = Calculator(frame2)
     v = tk.IntVar()
-    tk.Radiobutton(frame1, text="Hamak", variable=v, value=1, command=lambda: AP.switch_frame(Ham)).pack(side=tk.LEFT)
-    tk.Radiobutton(frame1, text="Trójkątny hamak", variable=v, value=2,
-                   command=lambda: AP.switch_frame(HamTriangle)).pack(side=tk.LEFT)
-    tk.Radiobutton(frame1, text="Domek kostka", variable=v, value=3, command=lambda: AP.switch_frame(Cube)).pack(
-        side=tk.LEFT)
-    tk.Radiobutton(frame1, text="Domek narożnik", variable=v, value=4,
-                   command=lambda: AP.switch_frame(CubeTriangle)).pack(
-        side=tk.LEFT)
-    tk.Radiobutton(frame1, text="Domek świnka", variable=v, value=5, command=lambda: AP.switch_frame(Pig)).pack(
-        side=tk.LEFT)
-    tk.Radiobutton(frame1, text="Paśnik/ham z dziurka/plaster 1 poziomowy", variable=v, value=6,
-                   command=lambda: AP.switch_frame(Ham2lvl)).pack(side=tk.LEFT)
+    val = tk.StringVar()
+    combo_values = ["Hamak", "Trójkątny hamak", "Domek kostka", "Domek narożnik", "Domek świnka",
+                    "Paśnik/ham z dziurka/plaster 1 poziomowy"]
+    combo = ttk.Combobox(frame1, textvariable=val, values=combo_values, state="readonly", width=100)
+    combo.bind("<<ComboboxSelected>>", callback_creator(val, combo_values, AP))
+    combo.pack(side=tk.TOP)
+    root.mainloop()
+
+
+def do_menu(frame):
+    menu_bar = tk.Menu(frame)
+    filemenu = tk.Menu(menu_bar, tearoff=0)
+    filemenu.add_command(label="Open")
+    filemenu.add_command(label="Save")
+    filemenu.add_separator()
+    filemenu.add_command(label="Quit", command=frame.quit)
+    menu_bar.add_cascade(label="Menu", menu=filemenu)
+
+    return menu_bar
+
+
+if __name__ == '__main__':
+    root = tk.Tk()
+    root.pack_propagate(0)
+    root.geometry("800x600")
+    root.config(menu=do_menu(root))
+    frame1 = tk.Frame(root).pack()
 
     root.mainloop()
