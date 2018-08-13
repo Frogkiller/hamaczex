@@ -60,7 +60,7 @@ class Ham(tk.Frame):
         dlug = self.itenz[self.entr[1]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        calculations = backend.hamak(int(szer.get()), int(dlug.get()), matpric, wat)
+        calculations = backend.ham_calc(int(szer.get()), int(dlug.get()), matpric, wat)
         self.wynik.insert(0, calculations)
 
 
@@ -76,7 +76,7 @@ class HamTriangle(tk.Frame):
         dlug = self.itenz[self.entr[1]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        hamak_v = backend.hamak(int(szer.get()), int(dlug.get()), matpric, wat)
+        hamak_v = backend.ham_calc(int(szer.get()), int(dlug.get()), matpric, wat)
         calculations = backend.ceiling_half(hamak_v/2)
         self.wynik.insert(0, calculations)
 
@@ -93,7 +93,7 @@ class Ham2lvl(tk.Frame):
         dlug = self.itenz[self.entr[1]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        hamak_v = backend.hamak(int(szer.get()), int(dlug.get()), matpric, wat)
+        hamak_v = backend.ham_calc(int(szer.get()), int(dlug.get()), matpric, wat)
         calculations = 2*hamak_v+2
         self.wynik.insert(0, calculations)
 
@@ -111,7 +111,7 @@ class Cube(tk.Frame):
         wys = self.itenz[self.entr[2]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        calculations = backend.kostka(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
+        calculations = backend.cube_calc(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
         self.wynik.insert(0, calculations)
 
 
@@ -120,7 +120,7 @@ class CubeTriangle(tk.Frame):
         tk.Frame.__init__(self, master)
         ui_maker(self, ["Szerokość", "Długość", "Wysokość"])
 
-    def fun(self):
+    def calculate(self):
         self.wynik.delete(0, tk.END)
         wat = self.watolina.get()
         szer = self.itenz[self.entr[0]]
@@ -128,7 +128,7 @@ class CubeTriangle(tk.Frame):
         wys = self.itenz[self.entr[2]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        calculations = backend.kostka_tr(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
+        calculations = backend.cuba_tri_calc(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
         self.wynik.insert(0, calculations)
 
 
@@ -145,7 +145,7 @@ class Pig(tk.Frame):
         wys = self.itenz[self.entr[2]]
         val = self.val.get()
         matpric = combox(val, self.mats)
-        calculations = backend.swinka(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
+        calculations = backend.pig_calc(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
         self.wynik.insert(0, calculations)
 
 

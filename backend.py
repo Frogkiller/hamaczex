@@ -18,7 +18,7 @@ def mats_price(size, tkan, wata):
     return ceiling_half(price)
 
 
-def kostka(szer, dl, wys, tkan, wata):
+def cube_calc(szer, dl, wys, tkan, wata):
     size = (szer*dl + szer*wys + wys*dl)*2
     price = mats_price(size, tkan, wata)
     if size < 2600:
@@ -30,7 +30,8 @@ def kostka(szer, dl, wys, tkan, wata):
     price = ceiling_half(price)
     return price
 
-def kostka_tr(szer, dl, wys, tkan, wata):
+
+def cuba_tri_calc(szer, dl, wys, tkan, wata):
     size = szer*dl + szer*wys + wys*dl + math.sqrt(dl*dl+szer*szer)
     price = mats_price(size, tkan, wata)
     if size < 3700:
@@ -40,7 +41,8 @@ def kostka_tr(szer, dl, wys, tkan, wata):
     price = ceiling_half(price)
     return price
 
-def swinka(szer, dl, wys, tkan, wata):
+
+def pig_calc(szer, dl, wys, tkan, wata):
     size = szer*dl + (szer*wys + wys*dl)*2
     price = mats_price(size, tkan, wata)
     if size < 3500:
@@ -51,7 +53,7 @@ def swinka(szer, dl, wys, tkan, wata):
     return price
 
 
-def hamak(szer, dl, tkan, wata):
+def ham_calc(szer, dl, tkan, wata):
     size = szer*dl
     price = mats_price(size, tkan, wata)
     if size < 1000:
