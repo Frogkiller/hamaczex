@@ -64,6 +64,18 @@ def ham_calc(szer, dl, tkan, wata):
     return price
 
 
+class ItemList:
+    def __init__(self):
+        self.items = dict()
+
+    def add(self, item):
+        self.items[len(self.items)] = item
+
+    def get(self, idx):
+        return self.items[idx]
+
+
+
 class Item:
     def __init__(self, parttype, comment, size, value, tranz, date):
         self.parttype = parttype
@@ -78,6 +90,6 @@ class Item:
         self.comment = str()
         self.size = int()
         self.value = int()
-        self.tranz = int() # TODO: create tranz class and link here
+        self.tranz = None # TODO: create tranz class and link here
         self.date = int()
 

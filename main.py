@@ -179,7 +179,7 @@ def callback_creator(box_value, full_values, app):
 
 
 def add_frame():
-    root = tk.Tk()
+    root = tk.Toplevel()
     root.pack_propagate(0)
     root.geometry("300x300")
     frame1 = tk.Frame(root)
@@ -196,7 +196,6 @@ def add_frame():
     combo = ttk.Combobox(frame1, textvariable=val, values=combo_values, state="readonly", width=100)
     combo.bind("<<ComboboxSelected>>", callback_creator(val, combo_values, AP))
     combo.pack(side=tk.TOP)
-    root.mainloop()
 
 
 def do_menu(frame):
@@ -211,29 +210,32 @@ def do_menu(frame):
     return menu_bar
 
 
+class ItemsFrame(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+        self.items = backend.ItemList()
+        self.tree = ttk.Treeview(self).grid(row=0, column=0)
+        self.view = self.do_custom_item(self).grid(row=0, column=1)
+
+
+    def do_custom_item(self, parent):
+        frame = tk.Frame(parent)
+        self.add_button = tk.Button(frame, text="New", command=add_frame).grid(row=0, column=0, columnspan=2)
+        return frame
+
+
 class TabsView(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         self.root = master
         self.nb = ttk.Notebook(self.root, width=800, height=600)
-        self.tab1 = self.do_item_frame(self.nb)
+        self.tab1 = ItemsFrame(self.nb)
         self.tab2 = tk.Frame(self.nb)
         self.tab3 = tk.Frame(self.nb)
         self.nb.add(self.tab1, text="Item")
         self.nb.add(self.tab2, text="Transaction")
         self.nb.add(self.tab3, text="Client")
         self.nb.pack()
-
-    def do_custom_item(self, parent):
-        frame = tk.Frame(parent)
-        ent = tk.Entry(frame).pack()
-        return frame
-
-    def do_item_frame(self, nb):
-        frame = tk.Frame(nb)
-        tree = ttk.Treeview(frame).grid(row=0, column=0)
-        view = self.do_custom_item(frame).grid(row=0, column=1)
-        return frame
 
 
 if __name__ == '__main__':
