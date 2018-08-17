@@ -161,22 +161,6 @@ class Calculator:
         self.frame_.pack()
 
 
-def callback_creator(box_value, full_values, app):
-    def select_callback(event):
-        if box_value.get() == full_values[0]:
-            app.switch_frame(Ham)
-        elif box_value.get() == full_values[1]:
-            app.switch_frame(HamTriangle)
-        elif box_value.get() == full_values[2]:
-            app.switch_frame(Cube)
-        elif box_value.get() == full_values[3]:
-            app.switch_frame(CubeTriangle)
-        elif box_value.get() == full_values[4]:
-            app.switch_frame(Pig)
-        elif box_value.get() == full_values[5]:
-            app.switch_frame(Ham2lvl)
-    return select_callback
-
 
 def do_menu(frame):
     menu_bar = tk.Menu(frame)
@@ -190,10 +174,51 @@ def do_menu(frame):
     return menu_bar
 
 
+class CalculatorWin:
+    def __init__(self):
+        self.combo_values = ["Hamak", "Trójkątny hamak", "Domek kostka", "Domek narożnik", "Domek świnka",
+                        "Paśnik/ham z dziurka/plaster 1 poziomowy"]
+
+
+    def show(self):
+        root = tk.Toplevel()
+        root.pack_propagate(0)
+        root.geometry("300x300")
+        frame1 = tk.Frame(root)
+        frame1.pack()
+        separator = tk.Frame(height=2, bd=1, relief=tk.SUNKEN)
+        separator.pack(fill=tk.X, padx=5, pady=5)
+        frame2 = tk.Frame(root)
+        frame2.pack()
+        AP = Calculator(frame2)
+        val = tk.StringVar()
+        combo = ttk.Combobox(frame1, textvariable=val, values=self.combo_values, state="readonly", width=100)
+        combo.bind("<<ComboboxSelected>>", self.callback_creator(val, self.combo_values, AP))
+        combo.pack(side=tk.TOP)
+
+    def callback_creator(self, box_value, full_values, app):
+        def select_callback(event):
+            if box_value.get() == full_values[0]:
+                app.switch_frame(Ham)
+            elif box_value.get() == full_values[1]:
+                app.switch_frame(HamTriangle)
+            elif box_value.get() == full_values[2]:
+                app.switch_frame(Cube)
+            elif box_value.get() == full_values[3]:
+                app.switch_frame(CubeTriangle)
+            elif box_value.get() == full_values[4]:
+                app.switch_frame(Pig)
+            elif box_value.get() == full_values[5]:
+                app.switch_frame(Ham2lvl)
+
+        return select_callback
+
+
 class ItemsFrame(tk.Frame):
     def __init__(self, master, data):
         tk.Frame.__init__(self, master)
         self.items = data
+        self.calc = CalculatorWin()
         self.tree = ttk.Treeview(self).grid(row=0, column=0)
         self.view = self.do_custom_item(self).grid(row=0, column=1)
 
@@ -207,23 +232,7 @@ class ItemsFrame(tk.Frame):
         return frame
 
     def addoner(self):
-        root = tk.Toplevel()
-        root.pack_propagate(0)
-        root.geometry("300x300")
-        frame1 = tk.Frame(root)
-        frame1.pack()
-        separator = tk.Frame(height=2, bd=1, relief=tk.SUNKEN)
-        separator.pack(fill=tk.X, padx=5, pady=5)
-        frame2 = tk.Frame(root)
-        frame2.pack()
-        AP = Calculator(frame2)
-        v = tk.IntVar()
-        val = tk.StringVar()
-        combo_values = ["Hamak", "Trójkątny hamak", "Domek kostka", "Domek narożnik", "Domek świnka",
-                        "Paśnik/ham z dziurka/plaster 1 poziomowy"]
-        combo = ttk.Combobox(frame1, textvariable=val, values=combo_values, state="readonly", width=100)
-        combo.bind("<<ComboboxSelected>>", callback_creator(val, combo_values, AP))
-        combo.pack(side=tk.TOP)
+        self.calc.show()
 
 
 class TabsView(tk.Frame):
