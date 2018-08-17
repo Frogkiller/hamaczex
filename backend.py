@@ -64,7 +64,11 @@ def ham_calc(szer, dl, tkan, wata):
     return price
 
 
-class ItemList:
+class DataModel:
+    def __init__(self):
+        self.items = ItemList()
+
+class ItemList():
     def __init__(self):
         self.items = dict()
 
@@ -73,7 +77,6 @@ class ItemList:
 
     def get(self, idx):
         return self.items[idx]
-
 
 
 class Item:

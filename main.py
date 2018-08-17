@@ -178,26 +178,6 @@ def callback_creator(box_value, full_values, app):
     return select_callback
 
 
-def add_frame():
-    root = tk.Toplevel()
-    root.pack_propagate(0)
-    root.geometry("300x300")
-    frame1 = tk.Frame(root)
-    frame1.pack()
-    separator = tk.Frame(height=2, bd=1, relief=tk.SUNKEN)
-    separator.pack(fill=tk.X, padx=5, pady=5)
-    frame2 = tk.Frame(root)
-    frame2.pack()
-    AP = Calculator(frame2)
-    v = tk.IntVar()
-    val = tk.StringVar()
-    combo_values = ["Hamak", "Trójkątny hamak", "Domek kostka", "Domek narożnik", "Domek świnka",
-                    "Paśnik/ham z dziurka/plaster 1 poziomowy"]
-    combo = ttk.Combobox(frame1, textvariable=val, values=combo_values, state="readonly", width=100)
-    combo.bind("<<ComboboxSelected>>", callback_creator(val, combo_values, AP))
-    combo.pack(side=tk.TOP)
-
-
 def do_menu(frame):
     menu_bar = tk.Menu(frame)
     filemenu = tk.Menu(menu_bar, tearoff=0)
@@ -211,25 +191,48 @@ def do_menu(frame):
 
 
 class ItemsFrame(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, data):
         tk.Frame.__init__(self, master)
-        self.items = backend.ItemList()
+        self.items = data
         self.tree = ttk.Treeview(self).grid(row=0, column=0)
         self.view = self.do_custom_item(self).grid(row=0, column=1)
+
+    def ref(self):
+        pass
 
 
     def do_custom_item(self, parent):
         frame = tk.Frame(parent)
-        self.add_button = tk.Button(frame, text="New", command=add_frame).grid(row=0, column=0, columnspan=2)
+        self.add_button = tk.Button(frame, text="New", command=self.addoner).grid(row=0, column=0, columnspan=2)
         return frame
+
+    def addoner(self):
+        root = tk.Toplevel()
+        root.pack_propagate(0)
+        root.geometry("300x300")
+        frame1 = tk.Frame(root)
+        frame1.pack()
+        separator = tk.Frame(height=2, bd=1, relief=tk.SUNKEN)
+        separator.pack(fill=tk.X, padx=5, pady=5)
+        frame2 = tk.Frame(root)
+        frame2.pack()
+        AP = Calculator(frame2)
+        v = tk.IntVar()
+        val = tk.StringVar()
+        combo_values = ["Hamak", "Trójkątny hamak", "Domek kostka", "Domek narożnik", "Domek świnka",
+                        "Paśnik/ham z dziurka/plaster 1 poziomowy"]
+        combo = ttk.Combobox(frame1, textvariable=val, values=combo_values, state="readonly", width=100)
+        combo.bind("<<ComboboxSelected>>", callback_creator(val, combo_values, AP))
+        combo.pack(side=tk.TOP)
 
 
 class TabsView(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, datamodel):
         tk.Frame.__init__(self, master)
         self.root = master
+        self.data = datamodel
         self.nb = ttk.Notebook(self.root, width=800, height=600)
-        self.tab1 = ItemsFrame(self.nb)
+        self.tab1 = ItemsFrame(self.nb, self.data)
         self.tab2 = tk.Frame(self.nb)
         self.tab3 = tk.Frame(self.nb)
         self.nb.add(self.tab1, text="Item")
@@ -243,7 +246,8 @@ if __name__ == '__main__':
     root.pack_propagate(0)
     root.geometry("800x600")
     root.config(menu=do_menu(root))
+    data = backend.DataModel()
     frame1 = tk.Frame(root).pack()
-    tabs = TabsView(frame1).pack()
+    tabs = TabsView(frame1, data).pack()
 
     root.mainloop()
