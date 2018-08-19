@@ -1,4 +1,5 @@
 import math
+import datetime
 from prices import *
 
 def ceiling_half(value):
@@ -28,7 +29,7 @@ def cube_calc(szer, dl, wys, tkan, wata):
     else:
         price += size * value_kostka_big
     price = ceiling_half(price)
-    return price
+    return price, size
 
 
 def cuba_tri_calc(szer, dl, wys, tkan, wata):
@@ -39,7 +40,7 @@ def cuba_tri_calc(szer, dl, wys, tkan, wata):
     else:
         price += size * value_kostka_tr_med
     price = ceiling_half(price)
-    return price
+    return price, size
 
 
 def pig_calc(szer, dl, wys, tkan, wata):
@@ -50,7 +51,7 @@ def pig_calc(szer, dl, wys, tkan, wata):
     else:
         price += size * value_swinka_big
     price = ceiling_half(price)
-    return price
+    return price, size
 
 
 def ham_calc(szer, dl, tkan, wata):
@@ -61,14 +62,18 @@ def ham_calc(szer, dl, tkan, wata):
     else:
         price += size * value_hamak
     price = ceiling_half(price)
-    return price
+    return price, size
 
 
 class DataModel:
     def __init__(self):
         self.items = ItemList()
 
-class ItemList():
+    def add_item(self, *rest):
+        self.items.add(Item(*rest))
+
+
+class ItemList:
     def __init__(self):
         self.items = dict()
 
@@ -78,21 +83,15 @@ class ItemList():
     def get(self, idx):
         return self.items[idx]
 
+    def __iter__(self):
+        return iter(self.items)
+
 
 class Item:
-    def __init__(self, parttype, comment, size, value, tranz, date):
+    def __init__(self, parttype=str(), comment='', size=0, value=0, tranz=None, date=datetime.date.today()):
         self.parttype = parttype
         self.comment = comment
         self.size = size
         self.value = value
         self.tranz = tranz
         self.date = date
-
-    def __init__(self):
-        self.parttype = str()
-        self.comment = str()
-        self.size = int()
-        self.value = int()
-        self.tranz = None # TODO: create tranz class and link here
-        self.date = int()
-
