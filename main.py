@@ -109,32 +109,45 @@ class HamTriangle(BaseCalc):
     def __init__(self, master, *rest):
         BaseCalc.__init__(self, master, ["Szerokość", "Długość"], *rest)
         self.set_func(self.calc)
+        self.set_add(self.add_f)
 
     def calc(self, itenz, matpric, wat):
         szer = itenz[self.fields[0]]
         dlug = itenz[self.fields[1]]
-        hamak_v = backend.ham_calc(int(szer.get()), int(dlug.get()), matpric, wat)
+        hamak_v, size = backend.ham_calc(int(szer.get()), int(dlug.get()), matpric, wat)
         ret = backend.ceiling_half(hamak_v/2)
-        return ret
+        return ret, size
+
+    def add_f(self):
+        szer = self.itenz[self.fields[0]].get()
+        dlug = self.itenz[self.fields[1]].get()
+        self.data.add_item('Hamak', szer + 'x' + dlug, self.value, self.size, None, datetime.date.today())
 
 
 class Ham2lvl(BaseCalc):
     def __init__(self, master, *rest):
         BaseCalc.__init__(self, master, ["Szerokość", "Długość"], *rest)
         self.set_func(self.calc)
+        self.set_add(self.add_f)
 
     def calc(self, itenz, matpric, wat):
         szer = itenz[self.fields[0]]
         dlug = itenz[self.fields[1]]
-        hamak_v = backend.ham_calc(int(szer.get()), int(dlug.get()), matpric, wat)
+        hamak_v, size = backend.ham_calc(int(szer.get()), int(dlug.get()), matpric, wat)
         ret = 2*hamak_v+2
-        return ret
+        return ret, size
+
+    def add_f(self):
+        szer = self.itenz[self.fields[0]].get()
+        dlug = self.itenz[self.fields[1]].get()
+        self.data.add_item('Hamak', szer + 'x' + dlug, self.value, self.size, None, datetime.date.today())
 
 
 class Cube(BaseCalc):
     def __init__(self, master, *rest):
         BaseCalc.__init__(self, master, ["Szerokość", "Długość", "Wysokość"], *rest)
         self.set_func(self.calc)
+        self.set_add(self.add_f)
 
     def calc(self, itenz, matpric, wat):
         szer = itenz[self.fields[0]]
@@ -143,11 +156,18 @@ class Cube(BaseCalc):
         ret = backend.cube_calc(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
         return ret
 
+    def add_f(self):
+        szer = self.itenz[self.fields[0]].get()
+        dlug = self.itenz[self.fields[1]].get()
+        wys = self.itenz[self.fields[2]].get()
+        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.value, self.size, None, datetime.date.today())
+
 
 class CubeTriangle(BaseCalc):
     def __init__(self, master, *rest):
         BaseCalc.__init__(self, master, ["Szerokość", "Długość", "Wysokość"], *rest)
         self.set_func(self.calc)
+        self.set_add(self.add_f)
 
     def calc(self, itenz, matpric, wat):
         szer = itenz[self.fields[0]]
@@ -156,11 +176,18 @@ class CubeTriangle(BaseCalc):
         ret = backend.cuba_tri_calc(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
         return ret
 
+    def add_f(self):
+        szer = self.itenz[self.fields[0]].get()
+        dlug = self.itenz[self.fields[1]].get()
+        wys = self.itenz[self.fields[2]].get()
+        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.value, self.size, None, datetime.date.today())
+
 
 class Pig(BaseCalc):
     def __init__(self, master, *rest):
         BaseCalc.__init__(self, master, ["Szerokość", "Długość", "Wysokość"], *rest)
         self.set_func(self.calc)
+        self.set_add(self.add_f)
 
     def calc(self, itenz, matpric, wat):
         szer = itenz[self.fields[0]]
@@ -168,6 +195,12 @@ class Pig(BaseCalc):
         wys = itenz[self.fields[2]]
         ret = backend.pig_calc(int(szer.get()), int(dlug.get()), int(wys.get()), matpric, wat)
         return ret
+
+    def add_f(self):
+        szer = self.itenz[self.fields[0]].get()
+        dlug = self.itenz[self.fields[1]].get()
+        wys = self.itenz[self.fields[2]].get()
+        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.value, self.size, None, datetime.date.today())
 
 
 class Calculator:
