@@ -78,7 +78,9 @@ class ItemList:
         self.items = dict()
 
     def add(self, item):
-        self.items[len(self.items)] = item
+        new_id = len(self.items)
+        self.items[new_id] = item
+        item.set_id(new_id)
 
     def get(self, idx):
         return self.items[idx]
@@ -95,3 +97,7 @@ class Item:
         self.value = value
         self.tranz = tranz
         self.date = date
+        self.iid = None
+
+    def set_id(self, iid):
+        self.iid = iid

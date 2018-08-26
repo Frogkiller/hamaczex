@@ -102,7 +102,7 @@ class Ham(BaseCalc):
     def add_f(self):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug, self.value, self.size, None, datetime.date.today())
+        self.data.add_item('Hamak', szer + 'x' + dlug, self.size, self.value, None, datetime.date.today())
 
 
 class HamTriangle(BaseCalc):
@@ -121,7 +121,7 @@ class HamTriangle(BaseCalc):
     def add_f(self):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug, self.value, self.size, None, datetime.date.today())
+        self.data.add_item('Hamak', szer + 'x' + dlug, self.size, self.value, None, datetime.date.today())
 
 
 class Ham2lvl(BaseCalc):
@@ -140,7 +140,7 @@ class Ham2lvl(BaseCalc):
     def add_f(self):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug, self.value, self.size, None, datetime.date.today())
+        self.data.add_item('Hamak', szer + 'x' + dlug, self.size, self.value, None, datetime.date.today())
 
 
 class Cube(BaseCalc):
@@ -160,7 +160,7 @@ class Cube(BaseCalc):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
         wys = self.itenz[self.fields[2]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.value, self.size, None, datetime.date.today())
+        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.size, self.value, None, datetime.date.today())
 
 
 class CubeTriangle(BaseCalc):
@@ -180,7 +180,7 @@ class CubeTriangle(BaseCalc):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
         wys = self.itenz[self.fields[2]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.value, self.size, None, datetime.date.today())
+        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.size, self.value, None, datetime.date.today())
 
 
 class Pig(BaseCalc):
@@ -200,7 +200,7 @@ class Pig(BaseCalc):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
         wys = self.itenz[self.fields[2]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.value, self.size, None, datetime.date.today())
+        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.size, self.value, None, datetime.date.today())
 
 
 class Calculator:
@@ -274,7 +274,8 @@ class ItemsFrame(tk.Frame):
     def __init__(self, master, data):
         tk.Frame.__init__(self, master)
         self.items = data
-        self.tree = ttk.Treeview(self)
+        self.tree = None
+        self.create_table(["size", "value"])
         self.tree.grid(row=0, column=0)
         self.view = self.do_custom_item(self)
         self.view.grid(row=0, column=1)
@@ -282,9 +283,12 @@ class ItemsFrame(tk.Frame):
 
     def ref(self):
         self.tree.delete(*self.tree.get_children())
+        rowid = 1
         for _, y in self.items.items.items.items():
-            self.tree.insert('', 'end', text=y.comment)
-        pass
+            self.tree.insert('', 'end', iid=rowid)
+            self.tree.set(rowid, column=0, value=y.comment)
+            self.tree.set(rowid, column=1, value=str(y.value))
+            rowid += 1
 
     def do_custom_item(self, parent):
         frame = tk.Frame(parent)
@@ -293,6 +297,15 @@ class ItemsFrame(tk.Frame):
 
     def addoner(self):
         self.calc.show()
+
+    def create_table(self, list_columns):
+        self.tree = ttk.Treeview(self)
+        self.tree['show'] = 'headings'
+        self.tree["columns"] = list_columns
+        for column in list_columns:
+            self.tree.column(column)
+            self.tree.heading(column, text=column.capitalize())
+
 
 
 class TabsView(tk.Frame):
