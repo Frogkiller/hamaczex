@@ -72,13 +72,13 @@ class DataModel:
         self.clients = ItemList()
 
     def add_item(self, *rest):
-        self.items.add(Item(*rest))
+        return self.items.add(Item(*rest))
 
-    def add_tans(self, *rest):
-        self.trans.add(Transaction(*rest))
+    def add_trans(self, *rest):
+        return self.trans.add(Transaction(*rest))
 
     def add_client(self, *rest):
-        self.clients.add(Client(*rest))
+        return self.clients.add(Client(*rest))
 
 
 class ItemList:
@@ -89,6 +89,7 @@ class ItemList:
         new_id = len(self.items)
         self.items[new_id] = item
         item.set_id(new_id)
+        return item
 
     def put(self, item):
         self.items[item.iid] = self.item
