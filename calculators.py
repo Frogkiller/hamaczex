@@ -212,3 +212,44 @@ class Calculator:
             self.frame_.destroy()
         self.frame_ = what(self.root, self.data, self.ref)
         self.frame_.pack()
+
+
+class CalculatorWin:
+    def __init__(self, model, refresh):
+        self.combo_values = ["Hamak", "Trójkątny hamak", "Domek kostka", "Domek narożnik", "Domek świnka",
+                        "Paśnik/ham z dziurka/plaster 1 poziomowy"]
+        self.data = model
+        self.refresh = refresh
+
+    def show(self):
+        root = tk.Toplevel()
+        root.pack_propagate(0)
+        root.geometry("300x300")
+        frame1 = tk.Frame(root)
+        frame1.pack()
+        separator = tk.Frame(height=2, bd=1, relief=tk.SUNKEN)
+        separator.pack(fill=tk.X, padx=5, pady=5)
+        frame2 = tk.Frame(root)
+        frame2.pack()
+        AP = Calculator(frame2, self.data, self.refresh)
+        val = tk.StringVar()
+        combo = ttk.Combobox(frame1, textvariable=val, values=self.combo_values, state="readonly", width=100)
+        combo.bind("<<ComboboxSelected>>", self.callback_creator(val, AP))
+        combo.pack(side=tk.TOP)
+
+    def callback_creator(self, box_value, app):
+        def select_callback(event):
+            if box_value.get() == self.combo_values[0]:
+                app.switch_frame(Ham)
+            elif box_value.get() == self.combo_values[1]:
+                app.switch_frame(HamTriangle)
+            elif box_value.get() == self.combo_values[2]:
+                app.switch_frame(Cube)
+            elif box_value.get() == self.combo_values[3]:
+                app.switch_frame(CubeTriangle)
+            elif box_value.get() == self.combo_values[4]:
+                app.switch_frame(Pig)
+            elif box_value.get() == self.combo_values[5]:
+                app.switch_frame(Ham2lvl)
+
+        return select_callback
