@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from items import ItemsFrame
-from t import TransactionFrame
+from transaction import TransactionFrame
 
 import backend
 
