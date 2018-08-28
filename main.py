@@ -27,7 +27,7 @@ class TabsView(tk.Frame):
         self.data = datamodel
         self.nb = ttk.Notebook(self.root, width=800, height=600)
         self.tab1 = ItemsFrame(self.nb, self.data)
-        self.tab2 = TransactionFrame(self.nb)
+        self.tab2 = TransactionFrame(self.nb, self.data)
         self.tab3 = tk.Frame(self.nb)
         self.nb.add(self.tab1, text="Item")
         self.nb.add(self.tab2, text="Transaction")

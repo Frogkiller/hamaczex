@@ -68,9 +68,17 @@ def ham_calc(szer, dl, tkan, wata):
 class DataModel:
     def __init__(self):
         self.items = ItemList()
+        self.trans = ItemList()
+        self.clients = ItemList()
 
     def add_item(self, *rest):
         self.items.add(Item(*rest))
+
+    def add_tans(self, *rest):
+        self.trans.add(Transaction(*rest))
+
+    def add_client(self, *rest):
+        self.clients.add(Client(*rest))
 
 
 class ItemList:
@@ -81,6 +89,9 @@ class ItemList:
         new_id = len(self.items)
         self.items[new_id] = item
         item.set_id(new_id)
+
+    def put(self, item):
+        self.items[item.iid] = self.item
 
     def get(self, idx):
         return self.items[idx]
@@ -96,6 +107,37 @@ class Item:
         self.size = size
         self.value = value
         self.tranz = tranz
+        self.date = date
+        self.iid = None
+
+    def set_id(self, iid):
+        self.iid = iid
+
+
+class Transaction:
+    def __init__(self, parttype=str(), comment='', client=None, items=ItemList(), date=datetime.date.today()):
+        self.parttype = parttype
+        self.comment = comment
+        self.client = client
+        self.items = items
+        self.date = date
+        self.iid = None
+
+    def set_id(self, iid):
+        self.iid = iid
+
+
+class Client:
+    def __init__(self, parttype=str(), comment='', nick='', name='', surname='', address='', phone='',
+                 transactions=ItemList(), date=datetime.date.today()):
+        self.parttype = parttype
+        self.comment = comment
+        self.nick = nick
+        self.name = name
+        self.surname = surname
+        self.phone = phone
+        self.address = address
+        self.transactions = transactions
         self.date = date
         self.iid = None
 

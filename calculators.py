@@ -28,6 +28,7 @@ def generator(tata, lista):
         enti[x] = entr
     return enti
 
+
 class BaseCalc(tk.Frame):
     def __init__(self, master, fields, data, ref):
         tk.Frame.__init__(self, master)
