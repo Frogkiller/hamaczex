@@ -80,6 +80,12 @@ class DataModel:
     def add_client(self, *rest):
         return self.clients.add(Client(*rest))
 
+    def delete_trans(self, idx):
+        self.trans.delete(idx)
+
+    def update_trans(self, trans):
+        return self.trans.put(trans)
+
 
 class ItemList:
     def __init__(self):
@@ -92,10 +98,13 @@ class ItemList:
         return item
 
     def put(self, item):
-        self.items[item.iid] = self.item
+        self.items[item.iid] = item
 
     def get(self, idx):
         return self.items[idx]
+
+    def delete(self, idx):
+        del self.items[idx]
 
     def __iter__(self):
         return iter(self.items)
