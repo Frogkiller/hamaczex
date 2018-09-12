@@ -15,6 +15,7 @@ class TransactionFrame(tk.Frame):
         self.hamm_tree.grid(row=1, column=0)
         self.add_button = tk.Button(self, text="Add", command=self.add_item)
         self.add_button.grid(row=1, column=1)
+        self.ref()
 
     def ref(self):
         self.tree.delete(*self.tree.get_children())

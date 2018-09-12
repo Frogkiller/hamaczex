@@ -1,4 +1,5 @@
 import math
+import pickle
 import datetime
 from prices import *
 import uuid
@@ -90,6 +91,20 @@ class DataModel:
     def conn_item_trans(self, ite, tra):
         self.trans.get(force_uuid(tra)).add_item(force_uuid(ite))
         self.items.get(force_uuid(ite)).set_trans(force_uuid(tra))
+
+    def dump(self):
+        filehandler = open("database.obj", "wb")
+        pickle.dump(self.items, filehandler)
+        pickle.dump(self.trans, filehandler)
+        pickle.dump(self.clients, filehandler)
+        filehandler.close()
+
+    def load(self):
+        filehandler = open("database.obj", "rb")
+        self.items = pickle.load(filehandler)
+        self.trans = pickle.load(filehandler)
+        self.clients = pickle.load(filehandler)
+        filehandler.close()
 
 
 def force_uuid(idx):

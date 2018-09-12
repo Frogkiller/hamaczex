@@ -11,6 +11,7 @@ class ItemsFrame(tk.Frame):
         self.view = self.do_custom_item(self)
         self.view.grid(row=0, column=1)
         self.calc = CalculatorWin(self.model, self)
+        self.ref()
 
     def ref(self):
         self.tree.delete(*self.tree.get_children())
