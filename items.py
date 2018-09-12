@@ -14,12 +14,10 @@ class ItemsFrame(tk.Frame):
 
     def ref(self):
         self.tree.delete(*self.tree.get_children())
-        rowid = 1
         for _, y in self.model.items.items.items():
-            self.tree.insert('', 'end', iid=rowid)
-            self.tree.set(rowid, column=0, value=y.comment)
-            self.tree.set(rowid, column=1, value=str(y.value))
-            rowid += 1
+            self.tree.insert('', 'end', iid=y.idx)
+            self.tree.set(y.idx, column=0, value=y.comment)
+            self.tree.set(y.idx, column=1, value=str(y.value))
 
     def do_custom_item(self, parent):
         frame = tk.Frame(parent)

@@ -1,6 +1,7 @@
 import math
 import datetime
 from prices import *
+import uuid
 
 def ceiling_half(value):
     rv = round(value)
@@ -86,60 +87,82 @@ class DataModel:
     def update_trans(self, trans):
         return self.trans.put(trans)
 
+    def conn_item_trans(self, ite, tra):
+        self.trans.get(force_uuid(tra)).add_item(force_uuid(ite))
+        self.items.get(force_uuid(ite)).set_trans(force_uuid(tra))
+
+
+def force_uuid(idx):
+    if type(idx) is str:
+        return uuid.UUID(idx)
+    else:
+        return idx
+
 
 class ItemList:
     def __init__(self):
         self.items = dict()
 
     def add(self, item):
-        new_id = len(self.items)
+        new_id = uuid.uuid4()
         self.items[new_id] = item
         item.set_id(new_id)
         return item
 
     def put(self, item):
-        self.items[item.iid] = item
+        self.items[item.idx] = item
 
     def get(self, idx):
-        return self.items[idx]
+        return self.items[force_uuid(idx)]
 
     def delete(self, idx):
-        del self.items[idx]
+        del self.items[force_uuid(idx)]
 
     def __iter__(self):
         return iter(self.items)
 
 
 class Item:
-    def __init__(self, parttype=str(), comment='', size=0, value=0, tranz=None, date=datetime.date.today()):
+    def __init__(self, parttype='', comment='', size=0, value=0, tranz=None, date=datetime.date.today()):
         self.parttype = parttype
         self.comment = comment
         self.size = size
         self.value = value
         self.tranz = tranz
         self.date = date
-        self.iid = None
+        self.idx = None
 
-    def set_id(self, iid):
-        self.iid = iid
+    def set_id(self, idx):
+        self.idx = idx
+
+    def set_trans(self, idx):
+        self.tranz = idx
 
 
 class Transaction:
-    def __init__(self, parttype=str(), comment='', client=None, items=ItemList(), date=datetime.date.today()):
+    def __init__(self, parttype=None, comment='', client=None, items=None, date=datetime.date.today()):
         self.parttype = parttype
         self.comment = comment
         self.client = client
+        if items is None:
+            items = set()
         self.items = items
         self.date = date
-        self.iid = None
+        self.idx = None
 
-    def set_id(self, iid):
-        self.iid = iid
+    def set_id(self, idx):
+        self.idx = idx
+
+    def add_item(self, idx):
+        self.items.add(idx)
+
+    def rm_item(self, idx):
+        self.items.remove(idx)
 
 
 class Client:
     def __init__(self, parttype=str(), comment='', nick='', name='', surname='', address='', phone='',
-                 transactions=ItemList(), date=datetime.date.today()):
+                 transactions=None, date=datetime.date.today()):
         self.parttype = parttype
         self.comment = comment
         self.nick = nick
@@ -149,7 +172,7 @@ class Client:
         self.address = address
         self.transactions = transactions
         self.date = date
-        self.iid = None
+        self.idx = None
 
-    def set_id(self, iid):
-        self.iid = iid
+    def set_id(self, idx):
+        self.idx = idx

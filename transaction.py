@@ -7,29 +7,49 @@ class TransactionFrame(tk.Frame):
     def __init__(self, master, data):
         tk.Frame.__init__(self, master)
         self.model = data
-        self.tree = None
-        self.create_table(["date", "client", "comment"])
+        self.tree = self.create_table(["date", "client", "comment"], self.selected)
         self.tree.grid(row=0, column=0)
         self.view = self.do_custom_item(self)
         self.view.grid(row=0, column=1)
+        self.hamm_tree = self.create_table(["size", "value", "comment"], None)
+        self.hamm_tree.grid(row=1, column=0)
+        self.add_button = tk.Button(self, text="Add", command=self.add_item)
+        self.add_button.grid(row=1, column=1)
 
     def ref(self):
         self.tree.delete(*self.tree.get_children())
         for _, y in self.model.trans.items.items():
-            self.tree.insert('', 'end', iid=y.iid)
-            self.tree.set(y.iid, column=0, value=y.comment)
-            self.tree.set(y.iid, column=1, value=str(y.date))
+            self.tree.insert('', 'end', iid=y.idx)
+            self.tree.set(y.idx, column=0, value=y.comment)
+            self.tree.set(y.idx, column=1, value=str(y.date))
+        self.ref_it()
+
+    def ref_it(self):
+        self.hamm_tree.delete(*self.hamm_tree.get_children())
+        val = self.idval.get()
+        if val is not '':
+            for y in self.model.trans.get(val).items:
+                element = self.model.items.get(y)
+                self.hamm_tree.insert('', 'end', iid=element.idx)
+                self.hamm_tree.set(element.idx, column=0, value=element.comment)
+                self.hamm_tree.set(element.idx, column=1, value=str(element.date))
 
     def create_item(self):
         trans = self.model.add_trans()
         trans.comment = self.comment_field.get()
         self.ref()
 
+    def add_item(self):
+        val = self.idval.get()
+        if val is not '':
+            item = self.master.children['!itemsframe'].tree.focus()
+            self.model.conn_item_trans(item, val)
+        self.ref_it()
+
     def modify_item(self):
         val = self.idval.get()
         if val is not '':
-            idx = int(val)
-            trans = self.model.trans.get(idx)
+            trans = self.model.trans.get(val)
             trans.comment = self.comment_field.get()
             self.model.update_trans(trans)
             self.ref()
@@ -37,8 +57,7 @@ class TransactionFrame(tk.Frame):
     def delete_item(self):
         val = self.idval.get()
         if val is not '':
-            idx = int(val)
-            self.model.delete_trans(idx)
+            self.model.delete_trans(val)
             self.ref()
             self.clear_view()
 
@@ -71,13 +90,14 @@ class TransactionFrame(tk.Frame):
     def selected(self, event):
         val = self.tree.identify_row(event.y)
         if val is not '':
-            sel = self.model.trans.get(int(val))
+            sel = self.model.trans.get(val)
             self.update_view(sel)
+        self.ref_it()
 
     def clear_view(self):
         sel = type('', (), {})
         sel.comment = ''
-        sel.iid = ''
+        sel.idx = ''
         sel.date = ''
         self.update_view(sel)
 
@@ -86,7 +106,7 @@ class TransactionFrame(tk.Frame):
         self.comment_field.insert(0, sel.comment)
         self.idval.config(state="normal")
         self.idval.delete(0, tk.END)
-        self.idval.insert(0, str(sel.iid))
+        self.idval.insert(0, str(sel.idx))
         self.idval.config(state="readonly")
         self.date.config(state="normal")
         self.date.delete(0, tk.END)
@@ -95,12 +115,12 @@ class TransactionFrame(tk.Frame):
         # self.client.delete(0, tk.END)
         # self.client.insert(0, selected.client)
 
-
-    def create_table(self, list_columns):
-        self.tree = ttk.Treeview(self)
-        self.tree['show'] = 'headings'
-        self.tree["columns"] = list_columns
+    def create_table(self, list_columns, binder):
+        tree = ttk.Treeview(self)
+        tree['show'] = 'headings'
+        tree["columns"] = list_columns
         for column in list_columns:
-            self.tree.column(column)
-            self.tree.heading(column, text=column.capitalize())
-        self.tree.bind("<Button-1>", self.selected)
+            tree.column(column)
+            tree.heading(column, text=column.capitalize())
+        tree.bind("<Button-1>", binder)
+        return tree
