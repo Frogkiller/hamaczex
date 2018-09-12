@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from items import ItemsFrame
 from transaction import TransactionFrame
+from client import ClientFrame
 
 import backend
 
@@ -35,7 +36,7 @@ class TabsView(tk.Frame):
         self.nb = ttk.Notebook(self.root, width=800, height=600)
         self.tab1 = ItemsFrame(self.nb, self.data)
         self.tab2 = TransactionFrame(self.nb, self.data)
-        self.tab3 = tk.Frame(self.nb)
+        self.tab3 = ClientFrame(self.nb, self.data)
         self.nb.add(self.tab1, text="Item")
         self.nb.add(self.tab2, text="Transaction")
         self.nb.add(self.tab3, text="Client")
@@ -46,7 +47,7 @@ class TabsView(tk.Frame):
         self.nb = ttk.Notebook(self.root, width=800, height=600)
         self.tab1 = ItemsFrame(self.nb, self.data)
         self.tab2 = TransactionFrame(self.nb, self.data)
-        self.tab3 = tk.Frame(self.nb)
+        self.tab3 = ClientFrame(self.nb, self.data)
         self.nb.add(self.tab1, text="Item")
         self.nb.add(self.tab2, text="Transaction")
         self.nb.add(self.tab3, text="Client")

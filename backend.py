@@ -92,6 +92,10 @@ class DataModel:
         self.trans.get(force_uuid(tra)).add_item(force_uuid(ite))
         self.items.get(force_uuid(ite)).set_trans(force_uuid(tra))
 
+    def conn_trans_cli(self, tra, cli):
+        self.clients.get(force_uuid(cli)).add_trans(force_uuid(tra))
+        self.trans.get(force_uuid(tra)).set_cli(force_uuid(cli))
+
     def dump(self):
         filehandler = open("database.obj", "wb")
         pickle.dump(self.items, filehandler)
@@ -174,6 +178,9 @@ class Transaction:
     def rm_item(self, idx):
         self.items.remove(idx)
 
+    def set_cli(self, idx):
+        self.client = idx
+
 
 class Client:
     def __init__(self, parttype=str(), comment='', nick='', name='', surname='', address='', phone='',
@@ -185,9 +192,17 @@ class Client:
         self.surname = surname
         self.phone = phone
         self.address = address
+        if transactions is None:
+            transactions = set()
         self.transactions = transactions
         self.date = date
         self.idx = None
 
     def set_id(self, idx):
         self.idx = idx
+
+    def add_trans(self, idx):
+        self.transactions.add(idx)
+
+    def rm_trans(self, idx):
+        self.transactions.remove(idx)

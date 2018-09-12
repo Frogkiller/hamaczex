@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 
-class TransactionFrame(tk.Frame):
+class ClientFrame(tk.Frame):
     def __init__(self, master, data):
         tk.Frame.__init__(self, master)
         self.model = data
@@ -10,41 +10,41 @@ class TransactionFrame(tk.Frame):
         self.tree.grid(row=0, column=0)
         self.view = self.do_custom_item(self)
         self.view.grid(row=0, column=1)
-        self.hamm_tree = self.create_table(["size", "value", "comment"], None)
-        self.hamm_tree.grid(row=1, column=0)
-        self.add_button = tk.Button(self, text="Add", command=self.add_item)
+        self.trans_tree = self.create_table(["size", "value", "comment"], None)
+        self.trans_tree.grid(row=1, column=0)
+        self.add_button = tk.Button(self, text="Add", command=self.add_trans)
         self.add_button.grid(row=1, column=1)
         self.ref()
 
     def ref(self):
         self.tree.delete(*self.tree.get_children())
-        for _, y in self.model.trans.items.items():
+        for _, y in self.model.clients.items.items():
             self.tree.insert('', 'end', iid=y.idx)
             self.tree.set(y.idx, column=0, value=y.comment)
             self.tree.set(y.idx, column=1, value=str(y.date))
-        self.ref_it()
+        self.ref_tr()
 
-    def ref_it(self):
-        self.hamm_tree.delete(*self.hamm_tree.get_children())
+    def ref_tr(self):
+        self.trans_tree.delete(*self.trans_tree.get_children())
         val = self.idval.get()
         if val is not '':
-            for y in self.model.trans.get(val).items:
-                element = self.model.items.get(y)
-                self.hamm_tree.insert('', 'end', iid=element.idx)
-                self.hamm_tree.set(element.idx, column=0, value=element.comment)
-                self.hamm_tree.set(element.idx, column=1, value=str(element.date))
+            for y in self.model.clients.get(val).transactions:
+                element = self.model.trans.get(y)
+                self.trans_tree.insert('', 'end', iid=element.idx)
+                self.trans_tree.set(element.idx, column=0, value=element.comment)
+                self.trans_tree.set(element.idx, column=1, value=str(element.date))
 
     def create_item(self):
-        trans = self.model.add_trans()
+        trans = self.model.add_client()
         trans.comment = self.comment_field.get()
         self.ref()
 
-    def add_item(self):
+    def add_trans(self):
         val = self.idval.get()
         if val is not '':
-            item = self.master.children['!itemsframe'].tree.focus()
-            self.model.conn_item_trans(item, val)
-        self.ref_it()
+            item = self.master.children['!transactionframe'].tree.focus()
+            self.model.conn_trans_cli(item, val)
+        self.ref_tr()
 
     def modify_item(self):
         val = self.idval.get()
@@ -90,9 +90,9 @@ class TransactionFrame(tk.Frame):
     def selected(self, event):
         val = self.tree.identify_row(event.y)
         if val is not '':
-            sel = self.model.trans.get(val)
+            sel = self.model.clients.get(val)
             self.update_view(sel)
-        self.ref_it()
+        self.ref_tr()
 
     def clear_view(self):
         sel = type('', (), {})
