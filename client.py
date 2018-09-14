@@ -14,10 +14,18 @@ class ClientFrame(tk.Frame):
         self.view.grid(row=0, column=1)
         self.trans_tree = self.create_table(["Date", "Comment", "State", "Items No.", "Value",
                                              "Shipping"], None)
+        self.trans_tree.bind("<Double-1>", self.focus_item)
         self.trans_tree.grid(row=1, column=0)
         self.add_button = tk.Button(self, text="Add", command=self.add_trans)
         self.add_button.grid(row=1, column=1)
         self.ref()
+
+    def focus_item(self, event):
+        val = self.trans_tree.identify_row(event.y)
+        if val is not '':
+            self.master.children['!transactionframe'].tree.selection_set(val)
+            self.master.children['!transactionframe'].simple_sel(val)
+            self.master.select(1)
 
     def ref(self):
         self.tree.delete(*self.tree.get_children())

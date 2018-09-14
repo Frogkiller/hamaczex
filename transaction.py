@@ -14,9 +14,17 @@ class TransactionFrame(tk.Frame):
         self.view.grid(row=0, column=1)
         self.hamm_tree = self.create_table(["Type", "Value", "Size", "Comment"], None)
         self.hamm_tree.grid(row=1, column=0)
+        self.hamm_tree.bind("<Double-1>", self.focus_item)
         self.add_button = tk.Button(self, text="Add", command=self.add_item)
         self.add_button.grid(row=1, column=1)
         self.ref()
+
+    def focus_item(self, event):
+        val = self.hamm_tree.identify_row(event.y)
+        if val is not '':
+            self.master.children['!itemsframe'].tree.selection_set(val)
+            self.master.children['!itemsframe'].simple_sel(val)
+            self.master.select(0)
 
     def ref(self):
         self.tree.delete(*self.tree.get_children())
@@ -73,6 +81,7 @@ class TransactionFrame(tk.Frame):
             trans.shipping = self.shipping.get()
             trans.value = self.value.get()
             self.model.update_trans(trans)
+            self.master.children['!clientframe'].ref_tr()
             self.ref()
 
     def delete_item(self):
@@ -81,10 +90,10 @@ class TransactionFrame(tk.Frame):
             self.model.delete_trans(val)
             self.clear_view()
             self.ref()
-        self.master.children['!clientframe'].ref_tr()
-        self.master.children['!clientframe'].ref()
-        self.master.children['!itemsframe'].ref()
-        self.master.children['!itemsframe'].clear_view()
+            self.master.children['!clientframe'].ref_tr()
+            self.master.children['!clientframe'].ref()
+            self.master.children['!itemsframe'].ref()
+            self.master.children['!itemsframe'].clear_view()
 
     def clear_item(self):
         self.clear_view()
@@ -148,8 +157,12 @@ class TransactionFrame(tk.Frame):
     def selected(self, event):
         val = self.tree.identify_row(event.y)
         if val is not '':
-            sel = self.model.trans.get(val)
-            self.update_view(sel)
+            self.simple_sel(val)
+        self.ref_it()
+
+    def simple_sel(self, idx):
+        sel = self.model.trans.get(idx)
+        self.update_view(sel)
         self.ref_it()
 
     def clear_view(self):

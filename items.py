@@ -111,8 +111,11 @@ class ItemsFrame(tk.Frame):
     def selected(self, event):
         val = self.tree.identify_row(event.y)
         if val is not '':
-            sel = self.model.items.get(val)
-            self.update_view(sel)
+            self.simple_sel(val)
+
+    def simple_sel(self, idx):
+        sel = self.model.items.get(idx)
+        self.update_view(sel)
 
     def clear_view(self):
         sel = type('', (), {})
