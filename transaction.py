@@ -6,11 +6,11 @@ class TransactionFrame(tk.Frame):
     def __init__(self, master, data):
         tk.Frame.__init__(self, master)
         self.model = data
-        self.tree = self.create_table(["date", "client", "comment"], self.selected)
+        self.tree = self.create_table(["Date", "Client", "Comment", "State", "Items No."], self.selected)
         self.tree.grid(row=0, column=0)
         self.view = self.do_custom_item(self)
         self.view.grid(row=0, column=1)
-        self.hamm_tree = self.create_table(["size", "value", "comment"], None)
+        self.hamm_tree = self.create_table(["Type", "Value", "Size", "Comment"], None)
         self.hamm_tree.grid(row=1, column=0)
         self.add_button = tk.Button(self, text="Add", command=self.add_item)
         self.add_button.grid(row=1, column=1)
@@ -20,8 +20,11 @@ class TransactionFrame(tk.Frame):
         self.tree.delete(*self.tree.get_children())
         for _, y in self.model.trans.items.items():
             self.tree.insert('', 'end', iid=y.idx)
-            self.tree.set(y.idx, column=0, value=y.comment)
-            self.tree.set(y.idx, column=1, value=str(y.date))
+            self.tree.set(y.idx, column=0, value=str(y.date))
+            self.tree.set(y.idx, column=1, value=y.client)
+            self.tree.set(y.idx, column=2, value=y.comment)
+            self.tree.set(y.idx, column=3, value=y.state)
+            self.tree.set(y.idx, column=4, value=len(y.items))
         self.ref_it()
 
     def ref_it(self):
@@ -31,13 +34,18 @@ class TransactionFrame(tk.Frame):
             for y in self.model.trans.get(val).items:
                 element = self.model.items.get(y)
                 self.hamm_tree.insert('', 'end', iid=element.idx)
-                self.hamm_tree.set(element.idx, column=0, value=element.comment)
-                self.hamm_tree.set(element.idx, column=1, value=str(element.date))
+                self.hamm_tree.set(element.idx, column=0, value=element.parttype)
+                self.hamm_tree.set(element.idx, column=1, value=element.value)
+                self.hamm_tree.set(element.idx, column=2, value=element.size)
+                self.hamm_tree.set(element.idx, column=3, value=element.comment)
 
     def create_item(self):
         trans = self.model.add_trans()
         trans.comment = self.comment_field.get()
+        self.clear_view()
+        self.ref_it()
         self.ref()
+
 
     def add_item(self):
         val = self.idval.get()
@@ -45,6 +53,7 @@ class TransactionFrame(tk.Frame):
             item = self.master.children['!itemsframe'].tree.focus()
             self.model.conn_item_trans(item, val)
         self.ref_it()
+        self.ref()
 
     def modify_item(self):
         val = self.idval.get()
@@ -120,7 +129,7 @@ class TransactionFrame(tk.Frame):
         tree['show'] = 'headings'
         tree["columns"] = list_columns
         for column in list_columns:
-            tree.column(column)
+            tree.column(column, minwidth=0, width=100)
             tree.heading(column, text=column.capitalize())
         tree.bind("<Button-1>", binder)
         return tree

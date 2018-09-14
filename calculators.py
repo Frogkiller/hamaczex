@@ -100,7 +100,7 @@ class Ham(BaseCalc):
     def add_f(self):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug, self.size, self.value, None, datetime.date.today())
+        self.data.add_item('Hamak', '', szer + 'x' + dlug, self.value, None, datetime.date.today())
 
 
 class HamTriangle(BaseCalc):
@@ -119,7 +119,7 @@ class HamTriangle(BaseCalc):
     def add_f(self):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug, self.size, self.value, None, datetime.date.today())
+        self.data.add_item('Hamak', '', szer + 'x' + dlug, self.value, None, datetime.date.today())
 
 
 class Ham2lvl(BaseCalc):
@@ -138,7 +138,7 @@ class Ham2lvl(BaseCalc):
     def add_f(self):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug, self.size, self.value, None, datetime.date.today())
+        self.data.add_item('Hamak', '', szer + 'x' + dlug, self.value, None, datetime.date.today())
 
 
 class Cube(BaseCalc):
@@ -158,7 +158,7 @@ class Cube(BaseCalc):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
         wys = self.itenz[self.fields[2]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.size, self.value, None, datetime.date.today())
+        self.data.add_item('Hamak', '', szer + 'x' + dlug + 'x' + wys, self.value, None, datetime.date.today())
 
 
 class CubeTriangle(BaseCalc):
@@ -178,7 +178,7 @@ class CubeTriangle(BaseCalc):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
         wys = self.itenz[self.fields[2]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.size, self.value, None, datetime.date.today())
+        self.data.add_item('Hamak', '', szer + 'x' + dlug + 'x' + wys, self.value, None, datetime.date.today())
 
 
 class Pig(BaseCalc):
@@ -198,7 +198,7 @@ class Pig(BaseCalc):
         szer = self.itenz[self.fields[0]].get()
         dlug = self.itenz[self.fields[1]].get()
         wys = self.itenz[self.fields[2]].get()
-        self.data.add_item('Hamak', szer + 'x' + dlug + 'x' + wys, self.size, self.value, None, datetime.date.today())
+        self.data.add_item('Hamak', '', szer + 'x' + dlug + 'x' + wys, self.value, None, datetime.date.today())
 
 
 class Calculator:

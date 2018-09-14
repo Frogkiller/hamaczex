@@ -142,7 +142,7 @@ class ItemList:
 
 
 class Item:
-    def __init__(self, parttype='', comment='', size=0, value=0, tranz=None, date=datetime.date.today()):
+    def __init__(self, parttype='', comment='', size='', value=0, tranz=None, date=datetime.date.today()):
         self.parttype = parttype
         self.comment = comment
         self.size = size
@@ -159,8 +159,8 @@ class Item:
 
 
 class Transaction:
-    def __init__(self, parttype=None, comment='', client=None, items=None, date=datetime.date.today()):
-        self.parttype = parttype
+    def __init__(self, state=None, comment='', client=None, items=None, date=datetime.date.today()):
+        self.state = state
         self.comment = comment
         self.client = client
         if items is None:
@@ -183,9 +183,9 @@ class Transaction:
 
 
 class Client:
-    def __init__(self, parttype=str(), comment='', nick='', name='', surname='', address='', phone='',
+    def __init__(self, source='', comment='', nick='', name='', surname='', address='', phone='',
                  transactions=None, date=datetime.date.today()):
-        self.parttype = parttype
+        self.source = source
         self.comment = comment
         self.nick = nick
         self.name = name

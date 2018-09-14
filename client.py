@@ -10,7 +10,7 @@ class ClientFrame(tk.Frame):
         self.tree.grid(row=0, column=0)
         self.view = self.do_custom_item(self)
         self.view.grid(row=0, column=1)
-        self.trans_tree = self.create_table(["size", "value", "comment"], None)
+        self.trans_tree = self.create_table(["date", "client", "comment", "state", "Items No."], None)
         self.trans_tree.grid(row=1, column=0)
         self.add_button = tk.Button(self, text="Add", command=self.add_trans)
         self.add_button.grid(row=1, column=1)
@@ -120,7 +120,7 @@ class ClientFrame(tk.Frame):
         tree['show'] = 'headings'
         tree["columns"] = list_columns
         for column in list_columns:
-            tree.column(column)
+            tree.column(column, minwidth=0, width=80)
             tree.heading(column, text=column.capitalize())
         tree.bind("<Button-1>", binder)
         return tree
