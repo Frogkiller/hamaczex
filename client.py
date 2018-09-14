@@ -193,7 +193,7 @@ class ClientFrame(tk.Frame):
         self.comment_field.delete("1.0", tk.END)
         self.comment_field.insert("1.0", sel.comment)
         self.address_field.delete("1.0", tk.END)
-        self.address_field.insert("1.0", sel.comment)
+        self.address_field.insert("1.0", sel.address)
         self.combo_source.current(backend.sources[sel.source])
 
         self.nick_field.delete(0, tk.END)
