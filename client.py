@@ -75,8 +75,9 @@ class ClientFrame(tk.Frame):
             if item is not '':
                 self.model.conn_trans_cli(item, val)
                 self.master.children['!transactionframe'].clear_item()
-        self.ref_tr()
-        self.ref()
+                self.ref_tr()
+                self.ref()
+                self.tree.selection_set(val)
 
     def modify_item(self):
         val = self.idval.get()

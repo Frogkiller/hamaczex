@@ -79,11 +79,11 @@ class TransactionFrame(tk.Frame):
             if item is not '':
                 self.model.conn_item_trans(item, val)
                 self.master.children['!itemsframe'].clear_item()
-        self.ref_it()
-        self.ref()
-        self.tree.selection_set(val)
-        self.master.children['!itemsframe'].ref()
-        self.master.children['!itemsframe'].clear_view()
+                self.ref_it()
+                self.ref()
+                self.tree.selection_set(val)
+                self.master.children['!itemsframe'].ref()
+                self.master.children['!itemsframe'].clear_view()
 
     def modify_item(self):
         val = self.idval.get()
