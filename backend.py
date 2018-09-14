@@ -82,11 +82,29 @@ class DataModel:
     def add_client(self, *rest):
         return self.clients.add(Client(*rest))
 
+    def delete_item(self, idx):
+        parent = self.items.get(idx).trans
+        if parent is not None:
+            self.trans.get(parent).items.remove(force_uuid(idx))
+        self.items.delete(idx)
+
     def delete_trans(self, idx):
+        parent = self.trans.get(idx).client
+        if parent is not None:
+            self.clients.get(parent).transactions.remove(force_uuid(idx))
+        childrens = self.trans.get(idx).items
+        for child in childrens:
+            self.items.get(child).trans = None
         self.trans.delete(idx)
 
     def delete_cli(self, idx):
+        childrens = self.clients.get(idx).trans
+        for child in childrens:
+            self.trans.get(child).client = None
         self.clients.delete(idx)
+
+    def update_item(self, it):
+        return self.items.put(it)
 
     def update_trans(self, trans):
         return self.trans.put(trans)
@@ -176,12 +194,12 @@ class ItemList:
 
 
 class Item:
-    def __init__(self, parttype='', comment='', size='', value=0, tranz=None, date=datetime.date.today()):
+    def __init__(self, parttype='', comment='', size='', value=0, trans=None, date=datetime.date.today()):
         self.parttype = parttype
         self.comment = comment
         self.size = size
         self.value = value
-        self.tranz = tranz
+        self.trans = trans
         self.date = date
         self.idx = None
 
@@ -189,7 +207,7 @@ class Item:
         self.idx = idx
 
     def set_trans(self, idx):
-        self.tranz = idx
+        self.trans = idx
 
 
 states = {"New": 0, "Prepared": 1, "Paid": 2, "Sent": 3, "Done": 4}

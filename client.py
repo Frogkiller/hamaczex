@@ -61,6 +61,7 @@ class ClientFrame(tk.Frame):
         self.ref()
 
     def add_trans(self):
+        # TODO: add checker for empty trans
         val = self.idval.get()
         if val is not '':
             item = self.master.children['!transactionframe'].tree.focus()

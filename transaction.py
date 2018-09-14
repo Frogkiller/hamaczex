@@ -7,7 +7,8 @@ class TransactionFrame(tk.Frame):
     def __init__(self, master, data):
         tk.Frame.__init__(self, master)
         self.model = data
-        self.tree = self.create_table(["Date", "Client", "Comment", "State", "Items No.", "Value", "Shipping"], self.selected)
+        self.tree = self.create_table(["Date", "Client", "Comment", "State", "Items No.", "Value", "Shipping"],
+                                      self.selected)
         self.tree.grid(row=0, column=0)
         self.view = self.do_custom_item(self)
         self.view.grid(row=0, column=1)
@@ -53,12 +54,15 @@ class TransactionFrame(tk.Frame):
         self.ref()
 
     def add_item(self):
+        # TODO: add checker for empty item
         val = self.idval.get()
         if val is not '':
             item = self.master.children['!itemsframe'].tree.focus()
             self.model.conn_item_trans(item, val)
         self.ref_it()
         self.ref()
+        self.master.children['!itemsframe'].ref()
+        self.master.children['!itemsframe'].clear_view()
 
     def modify_item(self):
         val = self.idval.get()
@@ -77,6 +81,10 @@ class TransactionFrame(tk.Frame):
             self.model.delete_trans(val)
             self.clear_view()
             self.ref()
+        self.master.children['!clientframe'].ref_tr()
+        self.master.children['!clientframe'].ref()
+        self.master.children['!itemsframe'].ref()
+        self.master.children['!itemsframe'].clear_view()
 
     def clear_item(self):
         self.clear_view()
