@@ -98,7 +98,7 @@ class DataModel:
         self.trans.delete(idx)
 
     def delete_cli(self, idx):
-        childrens = self.clients.get(idx).trans
+        childrens = self.clients.get(idx).transactions
         for child in childrens:
             self.trans.get(child).client = None
         self.clients.delete(idx)
