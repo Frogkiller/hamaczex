@@ -223,7 +223,7 @@ sources = {"OLX": 0, "Facebook": 1, "Other": 2}
 
 
 class Transaction:
-    def __init__(self, state=None, comment='', client=None, items=None, date=datetime.date.today(), shipping=None,
+    def __init__(self, state=None, comment='', client=None, items=None, date='', date_fin='', shipping=None,
                  value=0):
         self.state = state
         self.comment = comment
@@ -232,6 +232,7 @@ class Transaction:
             items = set()
         self.items = items
         self.date = date
+        self.date_fin = date_fin
         self.idx = None
         self.shipping = shipping
         self.value = value

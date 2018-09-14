@@ -1,3 +1,4 @@
+import datetime
 import tkinter as tk
 from tkinter import ttk
 import backend
@@ -7,7 +8,7 @@ class TransactionFrame(tk.Frame):
     def __init__(self, master, data):
         tk.Frame.__init__(self, master)
         self.model = data
-        self.tree = self.create_table(["Date", "Client", "Comment", "State", "Items No.", "Value", "Shipping"],
+        self.tree = self.create_table(["Date", "End Date", "Client", "Comment", "State", "Items No.", "Value", "Shipping"],
                                       self.selected)
         self.tree.grid(row=0, column=0)
         self.view = self.do_custom_item(self)
@@ -17,7 +18,7 @@ class TransactionFrame(tk.Frame):
         self.hamm_tree.bind("<Double-1>", self.focus_item)
         self.add_button = tk.Button(self, text="Add", command=self.add_item)
         self.add_button.grid(row=1, column=1)
-        self.ref()
+        self.clear_item()
 
     def btn_jump(self):
         val = self.idval.get()
@@ -42,12 +43,13 @@ class TransactionFrame(tk.Frame):
         for _, y in self.model.trans.items.items():
             self.tree.insert('', 'end', iid=y.idx)
             self.tree.set(y.idx, column=0, value=str(y.date))
-            self.tree.set(y.idx, column=1, value=self.model.print_cli(y.client))
-            self.tree.set(y.idx, column=2, value=y.comment)
-            self.tree.set(y.idx, column=3, value=y.state)
-            self.tree.set(y.idx, column=4, value=len(y.items))
-            self.tree.set(y.idx, column=5, value=y.value)
-            self.tree.set(y.idx, column=6, value=y.shipping)
+            self.tree.set(y.idx, column=1, value=str(y.date_fin))
+            self.tree.set(y.idx, column=2, value=self.model.print_cli(y.client))
+            self.tree.set(y.idx, column=3, value=y.comment)
+            self.tree.set(y.idx, column=4, value=y.state)
+            self.tree.set(y.idx, column=5, value=len(y.items))
+            self.tree.set(y.idx, column=6, value=y.value)
+            self.tree.set(y.idx, column=7, value=y.shipping)
         self.ref_it()
 
     def ref_it(self):
@@ -68,6 +70,8 @@ class TransactionFrame(tk.Frame):
         trans.state = self.state.get()
         trans.shipping = self.shipping.get()
         trans.value = self.value.get()
+        trans.date = self.date.get()
+        trans.date_fin = self.enddate.get()
         self.clear_view()
         self.ref_it()
         self.ref()
@@ -93,6 +97,8 @@ class TransactionFrame(tk.Frame):
             trans.state = self.state.get()
             trans.shipping = self.shipping.get()
             trans.value = self.value.get()
+            trans.date = self.date.get()
+            trans.date_fin = self.enddate.get()
             self.model.update_trans(trans)
             self.master.children['!clientframe'].ref_tr()
             self.ref()
@@ -144,29 +150,34 @@ class TransactionFrame(tk.Frame):
 
         label2 = tk.Label(frame, text="Date")
         label2.grid(row=4, column=0)
-        self.date = tk.Entry(frame, state="readonly")
+        self.date = tk.Entry(frame)
         self.date.grid(row=4, column=1)
 
+        label2 = tk.Label(frame, text="End date")
+        label2.grid(row=5, column=0)
+        self.enddate = tk.Entry(frame)
+        self.enddate.grid(row=5, column=1)
+
         label3 = tk.Label(frame, text="Client Name")
-        label3.grid(row=5, column=0)
+        label3.grid(row=6, column=0)
         self.client = tk.Entry(frame, state="readonly")
-        self.client.grid(row=5, column=1)
+        self.client.grid(row=6, column=1)
 
         label4 = tk.Label(frame, text="ID")
-        label4.grid(row=6, column=0)
+        label4.grid(row=7, column=0)
         self.idval = tk.Entry(frame, state="readonly")
-        self.idval.grid(row=6, column=1)
+        self.idval.grid(row=7, column=1)
 
         self.create_button = tk.Button(frame, text="Create", command=self.create_item)
-        self.create_button.grid(row=7, column=0)
+        self.create_button.grid(row=8, column=0)
         self.modify_button = tk.Button(frame, text="Modify", command=self.modify_item)
-        self.modify_button.grid(row=7, column=1)
+        self.modify_button.grid(row=8, column=1)
         self.delete_button = tk.Button(frame, text="Delete", command=self.delete_item)
-        self.delete_button.grid(row=8, column=0)
+        self.delete_button.grid(row=9, column=0)
         self.clear_button = tk.Button(frame, text="Clear", command=self.clear_item)
-        self.clear_button.grid(row=8, column=1)
+        self.clear_button.grid(row=9, column=1)
         self.jump_button = tk.Button(frame, text="Jump", command=self.btn_jump)
-        self.jump_button.grid(row=9, column=0)
+        self.jump_button.grid(row=10, column=0)
         return frame
 
     def selected(self, event):
@@ -187,7 +198,8 @@ class TransactionFrame(tk.Frame):
         sel.shipping = list(backend.shippings.keys())[0]
         sel.value = '0'
         sel.idx = ''
-        sel.date = ''
+        sel.date = str(datetime.date.today())
+        sel.date_fin = ''
         sel.client = None
         self.update_view(sel)
 
@@ -202,10 +214,10 @@ class TransactionFrame(tk.Frame):
         self.idval.delete(0, tk.END)
         self.idval.insert(0, str(sel.idx))
         self.idval.config(state="readonly")
-        self.date.config(state="normal")
         self.date.delete(0, tk.END)
         self.date.insert(0, str(sel.date))
-        self.date.config(state="readonly")
+        self.enddate.delete(0, tk.END)
+        self.enddate.insert(0, str(sel.date_fin))
         self.client.delete(0, tk.END)
         self.client.insert(0, self.model.print_cli(sel.client))
         self.client.config(state="readonly")
@@ -215,7 +227,7 @@ class TransactionFrame(tk.Frame):
         tree['show'] = 'headings'
         tree["columns"] = list_columns
         for column in list_columns:
-            tree.column(column, minwidth=0, width=100)
+            tree.column(column, minwidth=0, width=90)
             tree.heading(column, text=column.capitalize())
         tree.bind("<Button-1>", binder)
         return tree

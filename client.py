@@ -49,11 +49,12 @@ class ClientFrame(tk.Frame):
                 element = self.model.trans.get(y)
                 self.trans_tree.insert('', 'end', iid=element.idx)
                 self.trans_tree.set(element.idx, column=0, value=str(element.date))
-                self.trans_tree.set(element.idx, column=1, value=element.comment)
-                self.trans_tree.set(element.idx, column=2, value=element.state)
-                self.trans_tree.set(element.idx, column=3, value=len(element.items))
-                self.trans_tree.set(element.idx, column=4, value=element.value)
-                self.trans_tree.set(element.idx, column=5, value=element.shipping)
+                self.trans_tree.set(element.idx, column=1, value=str(element.date_fin))
+                self.trans_tree.set(element.idx, column=2, value=element.comment)
+                self.trans_tree.set(element.idx, column=3, value=element.state)
+                self.trans_tree.set(element.idx, column=4, value=len(element.items))
+                self.trans_tree.set(element.idx, column=5, value=element.value)
+                self.trans_tree.set(element.idx, column=6, value=element.shipping)
 
     def create_item(self):
         cli = self.model.add_client()
