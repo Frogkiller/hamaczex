@@ -73,11 +73,12 @@ class TransactionFrame(tk.Frame):
         self.ref()
 
     def add_item(self):
-        # TODO: add checker for empty item
         val = self.idval.get()
         if val is not '':
             item = self.master.children['!itemsframe'].tree.focus()
-            self.model.conn_item_trans(item, val)
+            if item is not '':
+                self.model.conn_item_trans(item, val)
+                self.master.children['!itemsframe'].clear_item()
         self.ref_it()
         self.ref()
         self.master.children['!itemsframe'].ref()

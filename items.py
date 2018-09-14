@@ -108,6 +108,10 @@ class ItemsFrame(tk.Frame):
         self.master.children['!transactionframe'].ref_it()
         self.master.children['!transactionframe'].ref()
 
+    def clear_item(self):
+        self.clear_view()
+        self.ref()
+
     def addoner(self):
         self.calc.show()
 

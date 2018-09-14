@@ -113,12 +113,18 @@ class DataModel:
         return self.clients.put(cli)
 
     def conn_item_trans(self, ite, tra):
-        self.trans.get(force_uuid(tra)).add_item(force_uuid(ite))
-        self.items.get(force_uuid(ite)).set_trans(force_uuid(tra))
+        transer = self.trans.get(force_uuid(tra))
+        item = self.items.get(force_uuid(ite))
+        if item.trans is None:
+            transer.add_item(force_uuid(ite))
+            item.set_trans(force_uuid(tra))
 
     def conn_trans_cli(self, tra, cli):
-        self.clients.get(force_uuid(cli)).add_trans(force_uuid(tra))
-        self.trans.get(force_uuid(tra)).set_cli(force_uuid(cli))
+        clienter = self.clients.get(force_uuid(cli))
+        transer = self.trans.get(force_uuid(tra))
+        if transer.client is None:
+            clienter.add_trans(force_uuid(tra))
+            transer.set_cli(force_uuid(cli))
 
     def dump(self):
         filehandler = open("database.obj", "wb")

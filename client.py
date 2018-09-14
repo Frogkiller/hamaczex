@@ -69,12 +69,12 @@ class ClientFrame(tk.Frame):
         self.ref()
 
     def add_trans(self):
-        # TODO: add checker for empty trans
         val = self.idval.get()
         if val is not '':
             item = self.master.children['!transactionframe'].tree.focus()
-            self.model.conn_trans_cli(item, val)
-            self.master.children['!transactionframe'].clear_item()
+            if item is not '':
+                self.model.conn_trans_cli(item, val)
+                self.master.children['!transactionframe'].clear_item()
         self.ref_tr()
         self.ref()
 
