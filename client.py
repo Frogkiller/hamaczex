@@ -166,8 +166,12 @@ class ClientFrame(tk.Frame):
     def selected(self, event):
         val = self.tree.identify_row(event.y)
         if val is not '':
-            sel = self.model.clients.get(val)
-            self.update_view(sel)
+            self.simple_sel(val)
+        self.ref_tr()
+
+    def simple_sel(self, idx):
+        sel = self.model.clients.get(idx)
+        self.update_view(sel)
         self.ref_tr()
 
     def clear_view(self):

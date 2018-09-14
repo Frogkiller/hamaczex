@@ -12,6 +12,17 @@ class ItemsFrame(tk.Frame):
         self.calc = CalculatorWin(self.model, self)
         self.ref()
 
+    def btn_jump(self):
+        val = self.idval.get()
+        if val is not '':
+            it = self.model.items.get(val)
+            self.jump_to_trans(it.trans)
+
+    def jump_to_trans(self, idx):
+        self.master.children['!transactionframe'].tree.selection_set(idx)
+        self.master.children['!transactionframe'].simple_sel(idx)
+        self.master.select(1)
+
     def print_trans(self, trans):
         if trans is not None:
             return 'YES'
@@ -74,6 +85,8 @@ class ItemsFrame(tk.Frame):
         self.modify_button.grid(row=8, column=1)
         self.delete_button = tk.Button(frame, text="Delete", command=self.delete_item)
         self.delete_button.grid(row=8, column=0)
+        self.jump_button = tk.Button(frame, text="Jump", command=self.btn_jump)
+        self.jump_button.grid(row=9, column=0)
         return frame
 
     def modify_item(self):

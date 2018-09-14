@@ -19,6 +19,17 @@ class TransactionFrame(tk.Frame):
         self.add_button.grid(row=1, column=1)
         self.ref()
 
+    def btn_jump(self):
+        val = self.idval.get()
+        if val is not '':
+            it = self.model.trans.get(val)
+            self.jump_to_cli(it.client)
+
+    def jump_to_cli(self, idx):
+        self.master.children['!clientframe'].tree.selection_set(idx)
+        self.master.children['!clientframe'].simple_sel(idx)
+        self.master.select(2)
+
     def focus_item(self, event):
         val = self.hamm_tree.identify_row(event.y)
         if val is not '':
@@ -152,6 +163,8 @@ class TransactionFrame(tk.Frame):
         self.delete_button.grid(row=8, column=0)
         self.clear_button = tk.Button(frame, text="Clear", command=self.clear_item)
         self.clear_button.grid(row=8, column=1)
+        self.jump_button = tk.Button(frame, text="Jump", command=self.btn_jump)
+        self.jump_button.grid(row=9, column=0)
         return frame
 
     def selected(self, event):
