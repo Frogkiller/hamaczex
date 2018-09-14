@@ -33,7 +33,7 @@ class TabsView(tk.Frame):
         tk.Frame.__init__(self, master)
         self.root = master
         self.data = datamodel
-        self.nb = ttk.Notebook(self.root, width=800, height=600)
+        self.nb = ttk.Notebook(self.root, width=1024, height=768)
         self.tab1 = ItemsFrame(self.nb, self.data)
         self.tab2 = TransactionFrame(self.nb, self.data)
         self.tab3 = ClientFrame(self.nb, self.data)
@@ -44,7 +44,7 @@ class TabsView(tk.Frame):
 
     def ref(self):
         self.nb.destroy()
-        self.nb = ttk.Notebook(self.root, width=800, height=600)
+        self.nb = ttk.Notebook(self.root, width=1024, height=768)
         self.tab1 = ItemsFrame(self.nb, self.data)
         self.tab2 = TransactionFrame(self.nb, self.data)
         self.tab3 = ClientFrame(self.nb, self.data)
@@ -57,7 +57,7 @@ class TabsView(tk.Frame):
 if __name__ == '__main__':
     root = tk.Tk()
     root.pack_propagate(0)
-    root.geometry("800x600")
+    root.geometry("1024x768")
     root.config(menu=do_menu(root))
     data = backend.DataModel()
     frame1 = tk.Frame(root).pack()

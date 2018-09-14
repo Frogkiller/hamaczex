@@ -158,8 +158,13 @@ class Item:
         self.tranz = idx
 
 
+states = {"New": 0, "Prepared": 1, "Paid": 2, "Sent": 3, "Done": 4}
+shippings = {"Collection": 0, "Eco": 1, "Prio": 2, "InPost": 3, "Pobranie": 4}
+shippings_price = {"Collection": 0, "Eco": 5, "Prio": 10, "InPost": 12, "Pobranie": 15}
+
 class Transaction:
-    def __init__(self, state=None, comment='', client=None, items=None, date=datetime.date.today()):
+    def __init__(self, state=None, comment='', client=None, items=None, date=datetime.date.today(), shipping=None,
+                 value=0):
         self.state = state
         self.comment = comment
         self.client = client
@@ -168,6 +173,8 @@ class Transaction:
         self.items = items
         self.date = date
         self.idx = None
+        self.shipping = shipping
+        self.value = value
 
     def set_id(self, idx):
         self.idx = idx
@@ -181,20 +188,23 @@ class Transaction:
     def set_cli(self, idx):
         self.client = idx
 
+    def add_value(self):
+        pass
+
 
 class Client:
     def __init__(self, source='', comment='', nick='', name='', surname='', address='', phone='',
                  transactions=None, date=datetime.date.today()):
-        self.source = source
-        self.comment = comment
-        self.nick = nick
-        self.name = name
-        self.surname = surname
-        self.phone = phone
-        self.address = address
+        self.source = source #4
+        self.comment = comment #8
+        self.nick = nick #1
+        self.name = name #2
+        self.surname = surname #3
+        self.phone = phone #5
+        self.address = address #6
         if transactions is None:
             transactions = set()
-        self.transactions = transactions
+        self.transactions = transactions #7
         self.date = date
         self.idx = None
 

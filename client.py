@@ -6,7 +6,7 @@ class ClientFrame(tk.Frame):
     def __init__(self, master, data):
         tk.Frame.__init__(self, master)
         self.model = data
-        self.tree = self.create_table(["date", "client", "comment"], self.selected)
+        self.tree = self.create_table(["Nick", "Name", "Surname", "Source", "Phone No.", "Address", "Trans No.", "Comment"], self.selected)
         self.tree.grid(row=0, column=0)
         self.view = self.do_custom_item(self)
         self.view.grid(row=0, column=1)

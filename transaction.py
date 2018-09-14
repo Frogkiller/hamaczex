@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
+import backend
 
 
 class TransactionFrame(tk.Frame):
     def __init__(self, master, data):
         tk.Frame.__init__(self, master)
         self.model = data
-        self.tree = self.create_table(["Date", "Client", "Comment", "State", "Items No."], self.selected)
+        self.tree = self.create_table(["Date", "Client", "Comment", "State", "Items No.", "Value", "Shipping"], self.selected)
         self.tree.grid(row=0, column=0)
         self.view = self.do_custom_item(self)
         self.view.grid(row=0, column=1)
@@ -25,6 +26,8 @@ class TransactionFrame(tk.Frame):
             self.tree.set(y.idx, column=2, value=y.comment)
             self.tree.set(y.idx, column=3, value=y.state)
             self.tree.set(y.idx, column=4, value=len(y.items))
+            self.tree.set(y.idx, column=5, value=y.value)
+            self.tree.set(y.idx, column=6, value=y.shipping)
         self.ref_it()
 
     def ref_it(self):
@@ -42,6 +45,9 @@ class TransactionFrame(tk.Frame):
     def create_item(self):
         trans = self.model.add_trans()
         trans.comment = self.comment_field.get()
+        trans.state = self.state.get()
+        trans.shipping = self.shipping.get()
+        trans.value = self.value.get()
         self.clear_view()
         self.ref_it()
         self.ref()
@@ -60,6 +66,9 @@ class TransactionFrame(tk.Frame):
         if val is not '':
             trans = self.model.trans.get(val)
             trans.comment = self.comment_field.get()
+            trans.state = self.state.get()
+            trans.shipping = self.shipping.get()
+            trans.value = self.value.get()
             self.model.update_trans(trans)
             self.ref()
 
@@ -70,30 +79,63 @@ class TransactionFrame(tk.Frame):
             self.ref()
             self.clear_view()
 
+    def clear_item(self):
+        self.clear_view()
+        self.ref_it()
+        self.ref()
+
     def do_custom_item(self, parent):
         frame = tk.Frame(parent)
+        self.state = tk.StringVar()
+        label0 = tk.Label(frame, text="State")
+        label0.grid(row=0, column=0)
+        self.combo_state = ttk.Combobox(frame, textvariable=self.state, values=list(backend.states.keys()), state="readonly")
+        self.combo_state.grid(row=0, column=1)
+        self.combo_state.current(0)
+
         label = tk.Label(frame, text="Comment")
-        label.grid(row=0, column=0)
+        label.grid(row=1, column=0)
         self.comment_field = tk.Entry(frame)
-        self.comment_field.grid(row=0, column=1)
+        self.comment_field.grid(row=1, column=1)
+
+        label = tk.Label(frame, text="Value")
+        label.grid(row=2, column=0)
+        self.val = tk.StringVar()
+        self.value = tk.Entry(frame, textvariable=self.val)
+        self.val.set("0")
+        self.value.grid(row=2, column=1)
+
+        self.shipping = tk.StringVar()
+        label0 = tk.Label(frame, text="Shipping")
+        label0.grid(row=3, column=0)
+        self.combo_ship = ttk.Combobox(frame, textvariable=self.shipping, values=list(backend.shippings.keys()),
+                                        state="readonly")
+        self.combo_ship.grid(row=3, column=1)
+        self.combo_ship.current(0)
+
         label2 = tk.Label(frame, text="Date")
-        label2.grid(row=1, column=0)
+        label2.grid(row=4, column=0)
         self.date = tk.Entry(frame, state="readonly")
-        self.date.grid(row=1, column=1)
+        self.date.grid(row=4, column=1)
+
         label3 = tk.Label(frame, text="Client Name")
-        label3.grid(row=2, column=0)
+        label3.grid(row=5, column=0)
         self.client = tk.Entry(frame, state="readonly")
-        self.client.grid(row=2, column=1)
+        self.client.grid(row=5, column=1)
+
         label4 = tk.Label(frame, text="ID")
-        label4.grid(row=3, column=0)
+        label4.grid(row=6, column=0)
         self.idval = tk.Entry(frame, state="readonly")
-        self.idval.grid(row=3, column=1)
+        self.idval.grid(row=6, column=1)
+
         self.create_button = tk.Button(frame, text="Create", command=self.create_item)
-        self.create_button.grid(row=4, column=0)
+        self.create_button.grid(row=7, column=0)
         self.modify_button = tk.Button(frame, text="Modify", command=self.modify_item)
-        self.modify_button.grid(row=4, column=1)
+        self.modify_button.grid(row=7, column=1)
         self.delete_button = tk.Button(frame, text="Delete", command=self.delete_item)
-        self.delete_button.grid(row=5, column=0)
+        self.delete_button.grid(row=8, column=0)
+        self.clear_button = tk.Button(frame, text="Clear", command=self.clear_item)
+        self.clear_button.grid(row=8, column=1)
         return frame
 
     def selected(self, event):
@@ -106,11 +148,16 @@ class TransactionFrame(tk.Frame):
     def clear_view(self):
         sel = type('', (), {})
         sel.comment = ''
+        sel.state = list(backend.states.keys())[0]
+        sel.shipping = list(backend.shippings.keys())[0]
+        sel.value = '0'
         sel.idx = ''
         sel.date = ''
         self.update_view(sel)
 
     def update_view(self, sel):
+        self.combo_state.current(backend.states[sel.state])
+        self.combo_ship.current(backend.shippings[sel.shipping])
         self.comment_field.delete(0, tk.END)
         self.comment_field.insert(0, sel.comment)
         self.idval.config(state="normal")
