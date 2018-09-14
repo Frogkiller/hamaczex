@@ -22,7 +22,7 @@ class TransactionFrame(tk.Frame):
         for _, y in self.model.trans.items.items():
             self.tree.insert('', 'end', iid=y.idx)
             self.tree.set(y.idx, column=0, value=str(y.date))
-            self.tree.set(y.idx, column=1, value=y.client)
+            self.tree.set(y.idx, column=1, value=self.model.print_cli(y.client))
             self.tree.set(y.idx, column=2, value=y.comment)
             self.tree.set(y.idx, column=3, value=y.state)
             self.tree.set(y.idx, column=4, value=len(y.items))
@@ -44,14 +44,13 @@ class TransactionFrame(tk.Frame):
 
     def create_item(self):
         trans = self.model.add_trans()
-        trans.comment = self.comment_field.get()
+        trans.comment = self.comment_field.get('1.0', 'end')
         trans.state = self.state.get()
         trans.shipping = self.shipping.get()
         trans.value = self.value.get()
         self.clear_view()
         self.ref_it()
         self.ref()
-
 
     def add_item(self):
         val = self.idval.get()
@@ -65,7 +64,7 @@ class TransactionFrame(tk.Frame):
         val = self.idval.get()
         if val is not '':
             trans = self.model.trans.get(val)
-            trans.comment = self.comment_field.get()
+            trans.comment = self.comment_field.get('1.0', 'end')
             trans.state = self.state.get()
             trans.shipping = self.shipping.get()
             trans.value = self.value.get()
@@ -76,8 +75,8 @@ class TransactionFrame(tk.Frame):
         val = self.idval.get()
         if val is not '':
             self.model.delete_trans(val)
-            self.ref()
             self.clear_view()
+            self.ref()
 
     def clear_item(self):
         self.clear_view()
@@ -95,7 +94,7 @@ class TransactionFrame(tk.Frame):
 
         label = tk.Label(frame, text="Comment")
         label.grid(row=1, column=0)
-        self.comment_field = tk.Entry(frame)
+        self.comment_field = tk.Text(frame, height=4, width=30)
         self.comment_field.grid(row=1, column=1)
 
         label = tk.Label(frame, text="Value")
@@ -153,13 +152,16 @@ class TransactionFrame(tk.Frame):
         sel.value = '0'
         sel.idx = ''
         sel.date = ''
+        sel.client = None
         self.update_view(sel)
 
     def update_view(self, sel):
         self.combo_state.current(backend.states[sel.state])
         self.combo_ship.current(backend.shippings[sel.shipping])
-        self.comment_field.delete(0, tk.END)
-        self.comment_field.insert(0, sel.comment)
+        self.comment_field.delete("1.0", tk.END)
+        self.comment_field.insert("1.0", sel.comment)
+        self.value.delete(0, tk.END)
+        self.value.insert(0, sel.value)
         self.idval.config(state="normal")
         self.idval.delete(0, tk.END)
         self.idval.insert(0, str(sel.idx))
@@ -168,8 +170,9 @@ class TransactionFrame(tk.Frame):
         self.date.delete(0, tk.END)
         self.date.insert(0, str(sel.date))
         self.date.config(state="readonly")
-        # self.client.delete(0, tk.END)
-        # self.client.insert(0, selected.client)
+        self.client.delete(0, tk.END)
+        self.client.insert(0, self.model.print_cli(sel.client))
+        self.client.config(state="readonly")
 
     def create_table(self, list_columns, binder):
         tree = ttk.Treeview(self)

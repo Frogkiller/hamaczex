@@ -85,8 +85,14 @@ class DataModel:
     def delete_trans(self, idx):
         self.trans.delete(idx)
 
+    def delete_cli(self, idx):
+        self.clients.delete(idx)
+
     def update_trans(self, trans):
         return self.trans.put(trans)
+
+    def update_cli(self, cli):
+        return self.clients.put(cli)
 
     def conn_item_trans(self, ite, tra):
         self.trans.get(force_uuid(tra)).add_item(force_uuid(ite))
@@ -109,6 +115,34 @@ class DataModel:
         self.trans = pickle.load(filehandler)
         self.clients = pickle.load(filehandler)
         filehandler.close()
+
+    def get_cli(self, idx):
+        try:
+            el = self.clients.get(force_uuid(idx))
+        except KeyError:
+            el = None
+        return el
+
+    def get_trans(self, idx):
+        try:
+            el = self.trans.get(force_uuid(idx))
+        except KeyError:
+            el = None
+        return el
+
+    def get_item(self, idx):
+        try:
+            el = self.item.get(force_uuid(idx))
+        except KeyError:
+            el = None
+        return el
+
+    def print_cli(self, idx):
+        if idx is not None:
+            el = self.get_cli(idx)
+            return el.name + ' ' + el.surname
+        else:
+            return ''
 
 
 def force_uuid(idx):
@@ -161,6 +195,8 @@ class Item:
 states = {"New": 0, "Prepared": 1, "Paid": 2, "Sent": 3, "Done": 4}
 shippings = {"Collection": 0, "Eco": 1, "Prio": 2, "InPost": 3, "Pobranie": 4}
 shippings_price = {"Collection": 0, "Eco": 5, "Prio": 10, "InPost": 12, "Pobranie": 15}
+sources = {"OLX": 0, "Facebook": 1, "Other": 2}
+
 
 class Transaction:
     def __init__(self, state=None, comment='', client=None, items=None, date=datetime.date.today(), shipping=None,
