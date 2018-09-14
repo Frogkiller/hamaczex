@@ -81,6 +81,7 @@ class TransactionFrame(tk.Frame):
                 self.master.children['!itemsframe'].clear_item()
         self.ref_it()
         self.ref()
+        self.tree.selection_set(val)
         self.master.children['!itemsframe'].ref()
         self.master.children['!itemsframe'].clear_view()
 
