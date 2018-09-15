@@ -82,9 +82,8 @@ class TransactionFrame(tk.Frame):
             item = self.master.children['!itemsframe'].tree.focus()
             if item is not '':
                 self.model.conn_item_trans(item, val)
-                fullvalue = self.val.get()
-                # self.val.set()
                 self.master.children['!itemsframe'].clear_item()
+                self.simple_sel(val)
                 self.ref_it()
                 self.ref()
                 self.tree.selection_set(val)

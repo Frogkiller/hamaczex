@@ -118,6 +118,7 @@ class DataModel:
         if item.trans is None:
             transer.add_item(force_uuid(ite))
             item.set_trans(force_uuid(tra))
+            transer.value = str(float(transer.value) + item.value)
 
     def conn_trans_cli(self, tra, cli):
         clienter = self.clients.get(force_uuid(cli))
@@ -156,7 +157,7 @@ class DataModel:
 
     def get_item(self, idx):
         try:
-            el = self.item.get(force_uuid(idx))
+            el = self.items.get(force_uuid(idx))
         except KeyError:
             el = None
         return el
