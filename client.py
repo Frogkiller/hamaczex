@@ -12,7 +12,7 @@ class ClientFrame(tk.Frame):
         self.tree.grid(row=0, column=0)
         self.view = self.do_custom_item(self)
         self.view.grid(row=0, column=1)
-        self.trans_tree = self.create_table(["Date", "Comment", "State", "Items No.", "Value",
+        self.trans_tree = self.create_table(["Date", "End Date", "Comment", "State", "Items No.", "Value",
                                              "Shipping"], None)
         self.trans_tree.bind("<Double-1>", self.focus_item)
         self.trans_tree.grid(row=1, column=0)
