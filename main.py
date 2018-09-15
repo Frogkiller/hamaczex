@@ -1,3 +1,6 @@
+import datetime
+import os
+import shutil
 import tkinter as tk
 from tkinter import ttk
 from items import ItemsFrame
@@ -12,11 +15,23 @@ def do_menu(frame):
     filemenu = tk.Menu(menu_bar, tearoff=0)
     filemenu.add_command(label="Open", command=lambda: load_data(frame))
     filemenu.add_command(label="Save", command=lambda: save_data(frame))
+    filemenu.add_command(label="Backup", command=lambda: backup())
     filemenu.add_separator()
     filemenu.add_command(label="Quit", command=frame.quit)
     menu_bar.add_cascade(label="Menu", menu=filemenu)
 
     return menu_bar
+
+
+def backup():
+    date = datetime.datetime.now()
+    filename = "database.obj"
+    dirname = "backup"
+    try:
+        os.mkdir(dirname)
+    except OSError:
+        pass
+    shutil.copy2(filename, dirname + '/bk.' + date.strftime("%Y-%m-%dT%H-%M-%S") + '.obj')
 
 
 def save_data(frame):
